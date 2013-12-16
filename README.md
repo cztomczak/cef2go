@@ -7,5 +7,5 @@ https://github.com/adieu/go-cef
 
 Notes
 -----
-* Use [SWIG](http://www.swig.org/Doc2.0/Go.html) to access CEF C++ api? Or maybe use CEF C api?
+* Use [SWIG](http://www.swig.org/Doc2.0/Go.html) to access CEF C++ api? Or maybe use CEF C api? [How to use C in Go](http://stackoverflow.com/questions/1713214/how-to-use-c-in-go)
 * Use [w32](https://github.com/AllenDang/w32) to access win32 api

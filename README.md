@@ -17,5 +17,8 @@ plans, and that includes javascript bindings and callbacks, so
 that you can have bidirectional communication between Go and
 Javascript.
 
+cef2go is licensed under the New BSD License (BSD 3-clause),
+see the LICENSE file.
+
 See also CEF bindings for Mac OS X:
 https://github.com/adieu/go-cef

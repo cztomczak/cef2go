@@ -1,6 +1,13 @@
-cef2go
-======
-Chromium Embedded Framework (CEF) bindings for the Go language.
+HTML 5 based GUI toolkit for the Go language
+=====================================================
+
+cef2go is an open source project founded by [Czarek Tomczak]
+(http://www.linkedin.com/in/czarektomczak) in 2014
+to provide Go bindings for the [Chromium Embedded Framework]
+(https://code.google.com/p/chromiumembedded/) (CEF).
+cef2go can act as a GUI toolkit, allowing you to create an HTML 5
+based GUI in your application. Or you can just provide browser
+capabilities to your application.
 
 Supported platforms: Windows (Linux should appear soon).
 

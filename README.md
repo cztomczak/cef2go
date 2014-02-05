@@ -43,7 +43,6 @@ Getting started on Windows
 
    Copy Release/* to cef2go/Release
    Copy Resources/* to cef2go/Release
-   Copy include/* to cef2go/include
 
 3. Run build_win.bat
 

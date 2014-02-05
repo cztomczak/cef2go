@@ -1,5 +1,5 @@
-@if exist "%~dp0bin\cef2go.exe" (
-    @del "%~dp0bin\cef2go.exe"
+@if exist "%~dp0Release\cef2go.exe" (
+    @del "%~dp0Release\cef2go.exe"
 )
-go build -o bin/cef2go.exe src/main_win.go
-call "bin/cef2go.exe"
+go build -o Release/cef2go.exe src/main_win.go
+call "Release/cef2go.exe"

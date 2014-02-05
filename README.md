@@ -22,15 +22,27 @@ cef2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
 
-Demo
----------------
-See the cef2go binary demo for Windows, works out of the box: ...
+Binary demo
+-----------
+See the cef2go binary demo for Windows, works out of the box:
+[](...)
 
 
-Getting started - Windows
--------------------------
-1. Download the CEF 3 branch 1650 revision 1562 binaries:
-   [cef_binary_3.1650.1562_windows32.7z]
-   (http://www.magpcss.net/cef_downloads/index.php?file=cef_binary_3.1650.1562_windows32.7z)
+Getting started on Windows
+--------------------------
+1. Install mingw and add C:\MinGW\bin to PATH. You can install mingw
+   using [mingw-get-setup.exe]
+   (http://sourceforge.net/projects/mingw/files/Installer/).
+   Select packages to install: "mingw-developer-toolkit",
+   "mingw32-base", "msys-base". cef2go was tested and works fine
+   with GCC 4.8.2. You can check gcc version with "gcc --version".
 
-3. ...
+2. Download CEF 3 branch 1750 revision 1590 binaries:
+   [cef_binary_3.1750.1590_windows32.7z]
+   (cef_binary_3.1750.1590_windows32.7z)
+
+   Copy Release/* to cef2go/Release
+   Copy Resources/* to cef2go/Release
+   Copy include/* to cef2go/include
+
+3. Run build_win.bat

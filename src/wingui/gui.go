@@ -111,7 +111,7 @@ func CreateWindow(title string) (hwnd syscall.Handle) {
     if e != nil {
         AbortErrNo("CreateWindowEx", e)
     }
-    fmt.Printf("main window handle is %x\n", wh)
+    //fmt.Printf("main window handle is %x\n", wh)
 
     // ShowWindow
     ShowWindow(wh, SW_SHOWDEFAULT)

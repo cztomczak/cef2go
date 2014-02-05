@@ -1,4 +1,4 @@
-HTML 5 based GUI toolkit for the Go language
+cef2go - HTML 5 based GUI toolkit for the Go language
 =====================================================
 
 cef2go is an open source project founded by [Czarek Tomczak]

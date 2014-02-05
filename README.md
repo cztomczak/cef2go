@@ -41,8 +41,8 @@ Getting started on Windows
    [cef_binary_3.1750.1590_windows32.7z]
    (cef_binary_3.1750.1590_windows32.7z)
 
-   Copy Release/* to cef2go/Release
-   Copy Resources/* to cef2go/Release
+   Copy Release/* to cef2go/Release  
+   Copy Resources/* to cef2go/Release  
 
 3. Run build_win.bat
 

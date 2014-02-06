@@ -9,7 +9,7 @@ cef2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can just provide browser
 capabilities to your application.
 
-Supported platforms: Windows. Linux should appear soon.
+Supported platforms: Windows. Linux should appear next.
 OS X a little bit later (see also [go-cef]
 (https://github.com/adieu/go-cef) for OS X).
 

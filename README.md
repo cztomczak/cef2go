@@ -9,8 +9,9 @@ cef2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can just provide browser
 capabilities to your application.
 
-Supported platforms: Windows (Linux should appear soon).
-For OS X see the [go-cef](https://github.com/adieu/go-cef) project.
+Supported platforms: Windows. Linux should appear soon.
+OS X a little bit later (see also [go-cef]
+(https://github.com/adieu/go-cef) for OS X).
 
 Currently the cef2go example creates just a simple window with
 the Chromium browser embedded. More advanced bindings are in

@@ -14,14 +14,16 @@ OS X a little bit later (see also [go-cef]
 (https://github.com/adieu/go-cef) for OS X).
 
 Currently the cef2go example creates just a simple window with
-the Chromium browser embedded. More advanced bindings are in
-plans, and that includes javascript bindings and callbacks, so
+the Chromium browser embedded. You can set a few options for
+your application like the cache directory. More advanced bindings
+are in plans, and that includes javascript bindings and callbacks, so
 that you can have bidirectional communication between Go and
 Javascript.
 
 cef2go on Windows uses the CEF C API. There is also available the
 CEF C++ api and gccgo can link with C++ programs, but unfortunately
-gccgo is not available for Windows, see [Issue 12 - Go compiler frontend].
+gccgo is not available for Windows, see [Issue 12 - Go compiler frontend]
+(https://code.google.com/p/gofrontend/issues/detail?id=12).
 On Linux it would be a good idea to bind to the CEF C++ API using gccgo. 
 There is also the [gomingw project](https://code.google.com/p/gomingw/) 
 that could be used on Windows to bind to the C++ api. But it is

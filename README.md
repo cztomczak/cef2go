@@ -31,10 +31,11 @@ cef2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
 
-Binary demo
------------
-See the cef2go binary demo for Windows, works out of the box:
-[](...)
+Binary example
+--------------
+See the cef2go binary example for Windows, works out of the box:
+[cef2go-0.10-example.zip]
+(https://github.com/CzarekTomczak/cef2go/releases/download/v0.10/cef2go-0.10-example.zip)  
 
 
 Getting started on Windows
@@ -48,7 +49,7 @@ Getting started on Windows
 
 2. Download CEF 3 branch 1750 revision 1590 binaries:
    [cef_binary_3.1750.1590_windows32.7z]
-   (cef_binary_3.1750.1590_windows32.7z)  
+   (https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)  
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 

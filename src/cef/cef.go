@@ -134,6 +134,7 @@ func CreateBrowser(hwnd syscall.Handle, settings BrowserSettings,
     // TODO: reference counting, see:
     // https://code.google.com/p/chromiumembedded/wiki/UsingTheCAPI
     // --
+    // What about C struct alignment issues in Go?
     // var refcnt unsafe.Pointer = unsafe.Pointer(&g_clientHandler)
     // refcnt += (unsafe.Pointer)(unsafe.Sizeof(g_clientHandler[0]))
     // C.InterlockedIncrement(refcnt)

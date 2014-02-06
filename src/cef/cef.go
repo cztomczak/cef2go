@@ -32,9 +32,6 @@ import "fmt"
 import "syscall"
 import "runtime"
 
-// May be different for OS other than Windows
-type CefStringType C.cef_string_utf16_t
-
 type Settings struct {
     CachePath string
     LogSeverity int
@@ -44,14 +41,14 @@ type BrowserSettings struct {
 }
 
 var g_mainArgs C.struct__cef_main_args_t
-var g_app C.cef_app_t
-var g_clientHandler C.struct__cef_client_t
+var g_app C.cef_app_t // needs reference counting
+var g_clientHandler C.struct__cef_client_t // needs reference counting
 
 // Sandbox is disabled. Including the "cef_sandbox.lib"
 // library results in lots of GCC warnings/errors. It is
 // compatible only with VS 2010. It would be required to
 // build it using GCC. Add -lcef_sandbox to LDFLAGS.
-var g_sandboxInfo unsafe.Pointer
+var g_sandboxInfo unsafe.Pointer = nil
 
 const (
     LOGSEVERITY_DEFAULT = C.LOGSEVERITY_DEFAULT
@@ -70,7 +67,7 @@ func ExecuteProcess(appHandle syscall.Handle) {
     // and cef_initialize().
     // OFF: g_sandboxInfo = C.cef_sandbox_info_create()
 
-    var exitCode C.int = C.cef_execute_process(&g_mainArgs, &g_app,
+    var exitCode C.int = C.cef_execute_process(&g_mainArgs, nil,
             g_sandboxInfo)
     if (exitCode >= 0) {
         os.Exit(int(exitCode))
@@ -90,7 +87,7 @@ func Initialize(settings Settings) {
     cefSettings.log_severity =
             (C.cef_log_severity_t)(C.int(settings.LogSeverity))
 
-    ret := C.cef_initialize(&g_mainArgs, &cefSettings, &g_app, g_sandboxInfo)
+    ret := C.cef_initialize(&g_mainArgs, &cefSettings, nil, g_sandboxInfo)
     fmt.Printf("cef2go: cef_initialize() returned %v\n", ret)
 }
 
@@ -133,7 +130,20 @@ func CreateBrowser(hwnd syscall.Handle, settings BrowserSettings,
 
     // create browser
     var cefSettings C.struct__cef_browser_settings_t
-    C.cef_browser_host_create_browser(&windowInfo, &g_clientHandler, &cefUrl,
+    
+    // TODO: reference counting, see:
+    // https://code.google.com/p/chromiumembedded/wiki/UsingTheCAPI
+    // --
+    // var refcnt unsafe.Pointer = unsafe.Pointer(&g_clientHandler)
+    // refcnt += (unsafe.Pointer)(unsafe.Sizeof(g_clientHandler[0]))
+    // C.InterlockedIncrement(refcnt)
+    // C.InterlockedIncrement(&g_clientHandler{0})
+    // C.InterlockedDecrement()
+    // --
+
+    // Must call synchronously so that a call to WindowResize()
+    // works, after this function returns.
+    C.cef_browser_host_create_browser_sync(&windowInfo, nil, &cefUrl,
             &cefSettings, nil)
 }
 
@@ -148,4 +158,20 @@ func QuitMessageLoop() {
 func Shutdown() {
     C.cef_shutdown()
     // OFF: cef_sandbox_info_destroy(g_sandboxInfo)
+}
+
+func WindowResized(hwnd syscall.Handle) {
+    var rect C.RECT;
+    C.GetClientRect(
+            (C.HWND)(unsafe.Pointer(hwnd)),
+            (*C.struct_tagRECT)(unsafe.Pointer(&rect)))
+    var hdwp C.HDWP = C.BeginDeferWindowPos(1)
+    var cefHwnd C.HWND = C.GetWindow(
+            (C.HWND)(unsafe.Pointer(hwnd)), C.GW_CHILD)
+    hdwp = C.DeferWindowPos(hdwp, cefHwnd, nil,
+            C.int(rect.left), C.int(rect.top),
+            C.int(rect.right - rect.left),
+            C.int(rect.bottom - rect.top),
+            C.SWP_NOZORDER)
+    C.EndDeferWindowPos(hdwp)
 }

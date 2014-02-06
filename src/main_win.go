@@ -30,10 +30,13 @@ func main() {
 
     fmt.Printf("cef2go: CreateBrowser()\n")
     browserSettings := cef.BrowserSettings{}
+    // TODO: It should be executable's directory used,
+    // and not working directory.
     url, _ := os.Getwd()
     url = "file://" + url + "/example.html"
     fmt.Printf("cef2go: url = %v\n", url)
     cef.CreateBrowser(hwnd, browserSettings, url)
+    cef.WindowResized(hwnd)
 
     fmt.Printf("cef2go: RunMessageLoop()\n")
     cef.RunMessageLoop()
@@ -48,6 +51,8 @@ func WndProc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (rc uintpt
     switch msg {
     case wingui.WM_CREATE:
         rc = wingui.DefWindowProc(hwnd, msg, wparam, lparam)
+    case wingui.WM_SIZE:
+        cef.WindowResized(hwnd)
     case wingui.WM_CLOSE:
         wingui.DestroyWindow(hwnd)
     case wingui.WM_DESTROY:

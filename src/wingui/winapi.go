@@ -76,6 +76,7 @@ const (
     // Some windows messages
     WM_CREATE  = 1
     WM_DESTROY = 2
+    WM_SIZE    = 5
     WM_CLOSE   = 16
     WM_COMMAND = 273
 

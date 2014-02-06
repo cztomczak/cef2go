@@ -34,6 +34,10 @@ the last release was two years ago.
 cef2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
+Help
+----
+Ask questions on the [cef2go forum](http://groups.google.com/group/cef2go).
+
 
 Binary example
 --------------

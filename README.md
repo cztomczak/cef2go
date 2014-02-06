@@ -39,8 +39,7 @@ Getting started on Windows
 
 2. Download CEF 3 branch 1750 revision 1590 binaries:
    [cef_binary_3.1750.1590_windows32.7z]
-   (cef_binary_3.1750.1590_windows32.7z)
-
+   (cef_binary_3.1750.1590_windows32.7z)  
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 

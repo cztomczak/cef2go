@@ -32,35 +32,7 @@ var (
     bh syscall.Handle
 )
 
-// WinProc called by windows to notify us of all windows events we might be interested in.
-func WndProc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (rc uintptr) {
-    switch msg {
-    case WM_CREATE:
-        rc = DefWindowProc(hwnd, msg, wparam, lparam)
-    /*
-    case WM_COMMAND:
-        switch syscall.Handle(lparam) {
-        case bh:
-            e := PostMessage(hwnd, WM_CLOSE, 0, 0)
-            if e != nil {
-                AbortErrNo("PostMessage", e)
-            }
-        default:
-            rc = DefWindowProc(hwnd, msg, wparam, lparam)
-        }
-    */
-    case WM_CLOSE:
-        DestroyWindow(hwnd)
-    case WM_DESTROY:
-        PostQuitMessage(0)
-    default:
-        rc = DefWindowProc(hwnd, msg, wparam, lparam)
-    }
-    //fmt.Printf("WndProc(0x%08x, %d, 0x%08x, 0x%08x) (%d)\n", hwnd, msg, wparam, lparam, rc)
-    return
-}
-
-func CreateWindow(title string) (hwnd syscall.Handle) {
+func CreateWindow(title string, wndproc uintptr) (hwnd syscall.Handle) {
     var e error
 
     // GetModuleHandle
@@ -81,14 +53,11 @@ func CreateWindow(title string) (hwnd syscall.Handle) {
         AbortErrNo("LoadCursor", e)
     }
 
-    // Create callback
-    wproc := syscall.NewCallback(WndProc)
-
     // RegisterClassEx
     wcname := syscall.StringToUTF16Ptr("myWindowClass")
     var wc Wndclassex
     wc.Size = uint32(unsafe.Sizeof(wc))
-    wc.WndProc = wproc
+    wc.WndProc = wndproc
     wc.Instance = mh
     wc.Icon = myicon
     wc.Cursor = mycursor

@@ -7,24 +7,51 @@ package cef
 /*
 CEF capi fixes
 --------------
+
 In cef_string.h:
-    this => typedef cef_string_utf16_t cef_string_t;
-    to => #define cef_string_t cef_string_utf16_t
+this => typedef cef_string_utf16_t cef_string_t;
+to => #define cef_string_t cef_string_utf16_t
+
+Sandbox functions aren't available in capi. Defined them
+in the comment above the import "C".
+
 */
 
 /*
 #cgo CFLAGS: -I./../../
-#cgo LDFLAGS: -L./../../Release -llibcef -lcef_sandbox
+#cgo LDFLAGS: -L./../../Release -llibcef
 #include <stdlib.h>
 #include "include/capi/cef_app_capi.h"
+void* cef_sandbox_info_create();
+void cef_sandbox_info_destroy(void* sandbox_info);
 */
 import "C"
 import "unsafe"
+import "os"
+import "fmt"
+import "syscall"
+import "runtime"
+
+// May be different for OS other than Windows
+type CefStringType C.cef_string_utf16_t
 
 type Settings struct {
     CachePath string
     LogSeverity int
 }
+
+type BrowserSettings struct {
+}
+
+var g_mainArgs C.struct__cef_main_args_t
+var g_app C.cef_app_t
+var g_clientHandler C.struct__cef_client_t
+
+// Sandbox is disabled. Including the "cef_sandbox.lib"
+// library results in lots of GCC warnings/errors. It is
+// compatible only with VS 2010. It would be required to
+// build it using GCC. Add -lcef_sandbox to LDFLAGS.
+var g_sandboxInfo unsafe.Pointer
 
 const (
     LOGSEVERITY_DEFAULT = C.LOGSEVERITY_DEFAULT
@@ -36,11 +63,22 @@ const (
     LOGSEVERITY_DISABLE = C.LOGSEVERITY_DISABLE
 )
 
+func ExecuteProcess(appHandle syscall.Handle) {
+    g_mainArgs.instance = (C.HINSTANCE)(unsafe.Pointer(appHandle))
+
+    // Sandbox info needs to be passed to both cef_execute_process()
+    // and cef_initialize().
+    // OFF: g_sandboxInfo = C.cef_sandbox_info_create()
+
+    var exitCode C.int = C.cef_execute_process(&g_mainArgs, &g_app,
+            g_sandboxInfo)
+    if (exitCode >= 0) {
+        os.Exit(int(exitCode))
+    }
+}
+
 func Initialize(settings Settings) {
-    var mainArgs C.struct__cef_main_args_t
     var cefSettings C.struct__cef_settings_t
-    var app C.cef_app_t
-    var sandbox unsafe.Pointer
 
     // cache_path
     var cachePath *C.char = C.CString(settings.CachePath)
@@ -52,8 +90,62 @@ func Initialize(settings Settings) {
     cefSettings.log_severity =
             (C.cef_log_severity_t)(C.int(settings.LogSeverity))
 
-    C.cef_initialize(&mainArgs, &cefSettings, &app, sandbox)
+    ret := C.cef_initialize(&g_mainArgs, &cefSettings, &g_app, g_sandboxInfo)
+    fmt.Printf("cef2go: cef_initialize() returned %v\n", ret)
 }
+
+func CreateBrowser(hwnd syscall.Handle, settings BrowserSettings, 
+        url string) {
+    var rect C.RECT
+    if (runtime.GOOS == "windows") {
+        var result C.BOOL = C.GetWindowRect(
+                (C.HWND)(unsafe.Pointer(hwnd)),
+                (*C.struct_tagRECT)(unsafe.Pointer(&rect)))
+        if (int(result) == 0) {
+            fmt.Printf("cef2go: CreateBrowser(): GetWindowRect() failed")
+            return
+        }
+    } else {
+        fmt.Printf("cef2go: CreateBrowser(): Unsupported OS\n")
+        os.Exit(1)
+    }
+    
+    // windowInfo
+    var windowInfo C.cef_window_info_t
+    if (runtime.GOOS == "windows") {
+        windowInfo.style = C.WS_CHILD | C.WS_CLIPCHILDREN | C.WS_CLIPSIBLINGS |
+                C.WS_TABSTOP | C.WS_VISIBLE
+    } else {
+        fmt.Printf("cef2go: CreateBrowser(): Unsupported OS\n")
+        os.Exit(1)
+    }
+    windowInfo.parent_window = (C.HWND)(unsafe.Pointer(hwnd))
+    windowInfo.x = C.int(rect.left)
+    windowInfo.y = C.int(rect.top)
+    windowInfo.width = C.int(rect.right - rect.left)
+    windowInfo.height = C.int(rect.bottom - rect.top)
+    
+    // url
+    var cefUrl C.cef_string_t
+    var charUrl *C.char = C.CString(url)
+    defer C.free(unsafe.Pointer(charUrl))
+    C.cef_string_from_utf8(charUrl, C.strlen(charUrl), &cefUrl)
+
+    // create browser
+    var cefSettings C.struct__cef_browser_settings_t
+    C.cef_browser_host_create_browser(&windowInfo, &g_clientHandler, &cefUrl,
+            &cefSettings, nil)
+}
+
+func RunMessageLoop() {
+    C.cef_run_message_loop()
+}
+
+func QuitMessageLoop() {
+    C.cef_quit_message_loop()
+}
+
 func Shutdown() {
     C.cef_shutdown()
+    // OFF: cef_sandbox_info_destroy(g_sandboxInfo)
 }

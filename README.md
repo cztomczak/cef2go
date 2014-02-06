@@ -21,8 +21,8 @@ that you can have bidirectional communication between Go and
 Javascript.
 
 cef2go on Windows uses the CEF C API. There is also available the
-CEF C++ api and gccgo can link with C++ programs, but unfortunately
-gccgo is not available for Windows, see [Issue 12 - Go compiler frontend]
+CEF C++ api, but unfortunately gccgo that can link with C++ programs
+is not available for Windows, see [Issue 12 - Go compiler frontend]
 (https://code.google.com/p/gofrontend/issues/detail?id=12).
 On Linux it would be a good idea to bind to the CEF C++ API using gccgo. 
 There is also the [gomingw project](https://code.google.com/p/gomingw/) 

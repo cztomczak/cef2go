@@ -12,9 +12,6 @@ In cef_string.h:
 this => typedef cef_string_utf16_t cef_string_t;
 to => #define cef_string_t cef_string_utf16_t
 
-Sandbox functions aren't available in capi. Defined them
-in the comment above the import "C".
-
 */
 
 /*
@@ -22,8 +19,6 @@ in the comment above the import "C".
 #cgo LDFLAGS: -L./../../Release -llibcef
 #include <stdlib.h>
 #include "include/capi/cef_app_capi.h"
-void* cef_sandbox_info_create();
-void cef_sandbox_info_destroy(void* sandbox_info);
 */
 import "C"
 import "unsafe"
@@ -48,6 +43,10 @@ var g_clientHandler C.struct__cef_client_t // needs reference counting
 // library results in lots of GCC warnings/errors. It is
 // compatible only with VS 2010. It would be required to
 // build it using GCC. Add -lcef_sandbox to LDFLAGS.
+// capi doesn't expose sandbox functions, you need do add
+// these before import "C":
+// void* cef_sandbox_info_create();
+// void cef_sandbox_info_destroy(void* sandbox_info);
 var g_sandboxInfo unsafe.Pointer = nil
 
 const (

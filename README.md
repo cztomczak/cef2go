@@ -20,17 +20,6 @@ are in plans, and that includes javascript bindings and callbacks, so
 that you can have bidirectional communication between Go and
 Javascript.
 
-cef2go on Windows uses the CEF C API. There is also available the
-CEF C++ api that would make it easier to create bindings, but 
-unfortunately gccgo that can link with C++ programs
-is not available for Windows. See [Issue 12 - Go compiler frontend]
-(https://code.google.com/p/gofrontend/issues/detail?id=12).
-On Linux it would be a good idea to bind to the CEF C++ API using gccgo. 
-There is also the [gomingw project](https://code.google.com/p/gomingw/) 
-that could be used on Windows to bind to the C++ api. But it is
-marked as "experimental" and seems like it's not actively developed,
-the last release was two years ago.
-
 cef2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 

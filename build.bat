@@ -19,7 +19,7 @@ go test src/tests/cef_test.go
     @del "%~dp0src\tests\debug.log"
 )
 
-go build -o Release/cef2go.exe src/main_win.go
+go build -o Release/cef2go.exe src/main_windows.go
 @if %ERRORLEVEL% neq 0 goto end
 
 cd Release/

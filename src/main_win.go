@@ -4,8 +4,8 @@
 
 package main
 
-import "./cef"
-import "./wingui"
+import "cef"
+import "wingui"
 import "os"
 import "fmt"
 import "syscall"

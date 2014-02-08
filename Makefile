@@ -16,7 +16,7 @@ export CC=gcc $(INC)
 all:
 	go install cef
 	go test -ldflags "-Wl,-rpath,$(PWD)/Release" src/tests/cef_test.go
-	go build -o Release/cef2go src/main_gtk.go
+	go build -o Release/cef2go src/main_linux.go
 
 clean:
 	go clean

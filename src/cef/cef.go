@@ -16,7 +16,6 @@ to => #define cef_string_t cef_string_utf16_t
 
 /*
 #cgo CFLAGS: -I./../../
-#cgo LDFLAGS: -L./../../Release -llibcef
 #include <stdlib.h>
 #include "string.h"
 #include "include/capi/cef_app_capi.h"

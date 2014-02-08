@@ -9,6 +9,7 @@ import "wingui"
 import "os"
 import "fmt"
 import "syscall"
+import "unsafe"
 
 func main() {
     hInstance, e := wingui.GetModuleHandle(nil)
@@ -16,7 +17,7 @@ func main() {
     
     fmt.Printf("cef2go: ExecuteProcess()\n")
     fmt.Printf("cef2go: process args = %v\n", os.Args)
-    cef.ExecuteProcess(hInstance)
+    cef.ExecuteProcess(unsafe.Pointer(hInstance))
     
     settings := cef.Settings{}
     settings.CachePath = "webcache" // Set to empty to disable
@@ -27,7 +28,7 @@ func main() {
 
     wndproc := syscall.NewCallback(WndProc)
     fmt.Printf("cef2go: CreateWindow()\n")
-    var hwnd syscall.Handle = wingui.CreateWindow("cef2go example", wndproc)
+    hwnd := wingui.CreateWindow("cef2go example", wndproc)
 
     fmt.Printf("cef2go: CreateBrowser()\n")
     browserSettings := cef.BrowserSettings{}
@@ -36,8 +37,8 @@ func main() {
     url, _ := os.Getwd()
     url = "file://" + url + "/example.html"
     fmt.Printf("cef2go: url = %v\n", url)
-    cef.CreateBrowser(hwnd, browserSettings, url)
-    cef.WindowResized(hwnd)
+    cef.CreateBrowser(unsafe.Pointer(hwnd), browserSettings, url)
+    cef.WindowResized(unsafe.Pointer(hwnd))
 
     fmt.Printf("cef2go: RunMessageLoop()\n")
     cef.RunMessageLoop()
@@ -53,7 +54,7 @@ func WndProc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (rc uintpt
     case wingui.WM_CREATE:
         rc = wingui.DefWindowProc(hwnd, msg, wparam, lparam)
     case wingui.WM_SIZE:
-        cef.WindowResized(hwnd)
+        cef.WindowResized(unsafe.Pointer(hwnd))
     case wingui.WM_CLOSE:
         wingui.DestroyWindow(hwnd)
     case wingui.WM_DESTROY:

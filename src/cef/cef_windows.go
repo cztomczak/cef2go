@@ -13,36 +13,31 @@ package cef
 */
 import "C"
 import "unsafe"
-import (
-    "syscall"
-)
 
 func FillMainArgs(mainArgs* C.struct__cef_main_args_t,
-        appHandle syscall.Handle) {
-    mainArgs.instance = (C.HINSTANCE)(unsafe.Pointer(appHandle))
+        appHandle unsafe.Pointer) {
+    mainArgs.instance = (C.HINSTANCE)(appHandle)
 }
 
-func FillWindowInfo(windowInfo* C.cef_window_info_t, hwnd syscall.Handle) {
+func FillWindowInfo(windowInfo* C.cef_window_info_t, hwnd unsafe.Pointer) {
     var rect C.RECT
-    C.GetWindowRect((C.HWND)(unsafe.Pointer(hwnd)),
+    C.GetWindowRect((C.HWND)(hwnd),
             (*C.struct_tagRECT)(unsafe.Pointer(&rect)))
     windowInfo.style = C.WS_CHILD | C.WS_CLIPCHILDREN | C.WS_CLIPSIBLINGS |
             C.WS_TABSTOP | C.WS_VISIBLE
-    windowInfo.parent_window = (C.HWND)(unsafe.Pointer(hwnd))
+    windowInfo.parent_window = (C.HWND)(hwnd)
     windowInfo.x = C.int(rect.left)
     windowInfo.y = C.int(rect.top)
     windowInfo.width = C.int(rect.right - rect.left)
     windowInfo.height = C.int(rect.bottom - rect.top)
 }
 
-func WindowResized(hwnd syscall.Handle) {
+func WindowResized(hwnd unsafe.Pointer) {
     var rect C.RECT;
-    C.GetClientRect(
-            (C.HWND)(unsafe.Pointer(hwnd)),
+    C.GetClientRect((C.HWND)(hwnd),
             (*C.struct_tagRECT)(unsafe.Pointer(&rect)))
     var hdwp C.HDWP = C.BeginDeferWindowPos(1)
-    var cefHwnd C.HWND = C.GetWindow(
-            (C.HWND)(unsafe.Pointer(hwnd)), C.GW_CHILD)
+    var cefHwnd C.HWND = C.GetWindow((C.HWND)(hwnd), C.GW_CHILD)
     hdwp = C.DeferWindowPos(hdwp, cefHwnd, nil,
             C.int(rect.left), C.int(rect.top),
             C.int(rect.right - rect.left),

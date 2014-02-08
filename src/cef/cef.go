@@ -23,7 +23,6 @@ to => #define cef_string_t cef_string_utf16_t
 import "C"
 import "unsafe"
 import "os"
-import "syscall"
 
 type Settings struct {
     CachePath string
@@ -45,7 +44,7 @@ var g_clientHandler C.struct__cef_client_t // needs reference counting
 // these before import "C":
 // void* cef_sandbox_info_create();
 // void cef_sandbox_info_destroy(void* sandbox_info);
-var g_sandboxInfo unsafe.Pointer = nil
+var g_sandboxInfo unsafe.Pointer
 
 const (
     LOGSEVERITY_DEFAULT = C.LOGSEVERITY_DEFAULT
@@ -57,7 +56,7 @@ const (
     LOGSEVERITY_DISABLE = C.LOGSEVERITY_DISABLE
 )
 
-func ExecuteProcess(appHandle syscall.Handle) {
+func ExecuteProcess(appHandle unsafe.Pointer) {
     FillMainArgs(&g_mainArgs, appHandle)
 
     // Sandbox info needs to be passed to both cef_execute_process()
@@ -88,7 +87,7 @@ func Initialize(settings Settings) int {
     return int(ret)
 }
 
-func CreateBrowser(hwnd syscall.Handle, settings BrowserSettings, 
+func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings, 
         url string) {
     // windowInfo
     var windowInfo C.cef_window_info_t

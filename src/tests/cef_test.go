@@ -20,7 +20,7 @@ func Test_Initialize(t *testing.T) {
     settings := cef.Settings{}
     init := cef.Initialize(settings)
     if init != 1 {
-        t.Error("Initialize() returned: %d", init)
+        t.Errorf("Initialize() returned: %d", init)
     }
 }
 func Test_Shutdown(t *testing.T) {

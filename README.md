@@ -50,5 +50,16 @@ Getting started on Windows
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 
-3. Run build_win.bat
+3. Run build.bat
+
+
+Getting started on Linux
+------------------------
+Linux port NOT yet ready.
+
+1. These instructions work fine with Ubuntu 12.04.3 64-bit
+
+2. Install CEF dependencies:  
+   `sudo apt-get install build-essential libgtk2.0-dev libgtkglext1-dev`
+
 

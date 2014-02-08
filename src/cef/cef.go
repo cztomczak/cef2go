@@ -18,14 +18,13 @@ to => #define cef_string_t cef_string_utf16_t
 #cgo CFLAGS: -I./../../
 #cgo LDFLAGS: -L./../../Release -llibcef
 #include <stdlib.h>
+#include "string.h"
 #include "include/capi/cef_app_capi.h"
 */
 import "C"
 import "unsafe"
 import "os"
-import "fmt"
 import "syscall"
-import "runtime"
 
 type Settings struct {
     CachePath string
@@ -60,7 +59,7 @@ const (
 )
 
 func ExecuteProcess(appHandle syscall.Handle) {
-    g_mainArgs.instance = (C.HINSTANCE)(unsafe.Pointer(appHandle))
+    FillMainArgs(&g_mainArgs, appHandle)
 
     // Sandbox info needs to be passed to both cef_execute_process()
     // and cef_initialize().
@@ -92,34 +91,9 @@ func Initialize(settings Settings) int {
 
 func CreateBrowser(hwnd syscall.Handle, settings BrowserSettings, 
         url string) {
-    var rect C.RECT
-    if (runtime.GOOS == "windows") {
-        var result C.BOOL = C.GetWindowRect(
-                (C.HWND)(unsafe.Pointer(hwnd)),
-                (*C.struct_tagRECT)(unsafe.Pointer(&rect)))
-        if (int(result) == 0) {
-            fmt.Printf("cef2go: CreateBrowser(): GetWindowRect() failed")
-            return
-        }
-    } else {
-        fmt.Printf("cef2go: CreateBrowser(): Unsupported OS\n")
-        os.Exit(1)
-    }
-    
     // windowInfo
     var windowInfo C.cef_window_info_t
-    if (runtime.GOOS == "windows") {
-        windowInfo.style = C.WS_CHILD | C.WS_CLIPCHILDREN | C.WS_CLIPSIBLINGS |
-                C.WS_TABSTOP | C.WS_VISIBLE
-    } else {
-        fmt.Printf("cef2go: CreateBrowser(): Unsupported OS\n")
-        os.Exit(1)
-    }
-    windowInfo.parent_window = (C.HWND)(unsafe.Pointer(hwnd))
-    windowInfo.x = C.int(rect.left)
-    windowInfo.y = C.int(rect.top)
-    windowInfo.width = C.int(rect.right - rect.left)
-    windowInfo.height = C.int(rect.bottom - rect.top)
+    FillWindowInfo(&windowInfo, hwnd)
     
     // url
     var cefUrl C.cef_string_t
@@ -158,20 +132,4 @@ func QuitMessageLoop() {
 func Shutdown() {
     C.cef_shutdown()
     // OFF: cef_sandbox_info_destroy(g_sandboxInfo)
-}
-
-func WindowResized(hwnd syscall.Handle) {
-    var rect C.RECT;
-    C.GetClientRect(
-            (C.HWND)(unsafe.Pointer(hwnd)),
-            (*C.struct_tagRECT)(unsafe.Pointer(&rect)))
-    var hdwp C.HDWP = C.BeginDeferWindowPos(1)
-    var cefHwnd C.HWND = C.GetWindow(
-            (C.HWND)(unsafe.Pointer(hwnd)), C.GW_CHILD)
-    hdwp = C.DeferWindowPos(hdwp, cefHwnd, nil,
-            C.int(rect.left), C.int(rect.top),
-            C.int(rect.right - rect.left),
-            C.int(rect.bottom - rect.top),
-            C.SWP_NOZORDER)
-    C.EndDeferWindowPos(hdwp)
 }

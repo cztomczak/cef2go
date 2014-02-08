@@ -73,7 +73,7 @@ func ExecuteProcess(appHandle syscall.Handle) {
     }
 }
 
-func Initialize(settings Settings) {
+func Initialize(settings Settings) int {
     var cefSettings C.struct__cef_settings_t
 
     // cache_path
@@ -87,7 +87,7 @@ func Initialize(settings Settings) {
             (C.cef_log_severity_t)(C.int(settings.LogSeverity))
 
     ret := C.cef_initialize(&g_mainArgs, &cefSettings, nil, g_sandboxInfo)
-    fmt.Printf("cef2go: cef_initialize() returned %v\n", ret)
+    return int(ret)
 }
 
 func CreateBrowser(hwnd syscall.Handle, settings BrowserSettings, 

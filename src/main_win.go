@@ -22,8 +22,9 @@ func main() {
     settings.CachePath = "webcache" // Set to empty to disable
     settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
     fmt.Printf("cef2go: Initialize()\n")
-    cef.Initialize(settings)
-    
+    init := cef.Initialize(settings)
+    fmt.Printf("cef2go: Initialize() returned: %d\n", init)
+
     wndproc := syscall.NewCallback(WndProc)
     fmt.Printf("cef2go: CreateWindow()\n")
     var hwnd syscall.Handle = wingui.CreateWindow("cef2go example", wndproc)

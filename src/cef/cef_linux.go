@@ -6,7 +6,6 @@ package cef
 
 /*
 #cgo CFLAGS: -I./../../
-#cgo LDFLAGS: -L./../../Release -lcef
 #include <stdlib.h>
 #include "string.h"
 #include "include/capi/cef_app_capi.h"
@@ -17,21 +16,20 @@ import (
     "os"
 )
 
+var g_argv []*C.char = make([]*C.char, len(os.Args))
+
 func FillMainArgs(mainArgs *C.struct__cef_main_args_t,
         appHandle unsafe.Pointer) {
     // On Linux appHandle is nil.
-    // Converting os.Args to C equivalent argc/argv.
-    var char *C.char
-    charSize := int(unsafe.Sizeof(char))
-    argv := C.malloc(C.size_t(charSize * len(os.Args)))
+    g_logger.Println("FillMainArgs, argc=", len(os.Args))
     for i, arg := range os.Args {
-        // These C strings are not supposed to be freed,
-        // do not call C.free().
-        charArg := C.CString(arg)
-        ptr := unsafe.Pointer(uintptr(argv) + uintptr(charSize * i))
-        ptrSize := C.size_t(unsafe.Sizeof(ptr))
-        C.memcpy(ptr, unsafe.Pointer(charArg), ptrSize)
+        g_argv[C.int(i)] = C.CString(arg)
     }
     mainArgs.argc = C.int(len(os.Args))
-    mainArgs.argv = (**C.char)(argv)
+    mainArgs.argv = &g_argv[0]
+}
+
+func FillWindowInfo(windowInfo *C.cef_window_info_t, hwnd unsafe.Pointer) {
+    g_logger.Println("FillWindowInfo")
+    windowInfo.parent_widget = (*C.GtkWidget)(hwnd)
 }

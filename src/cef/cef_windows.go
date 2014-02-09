@@ -14,12 +14,14 @@ package cef
 import "C"
 import "unsafe"
 
-func FillMainArgs(mainArgs* C.struct__cef_main_args_t,
+func FillMainArgs(mainArgs *C.struct__cef_main_args_t,
         appHandle unsafe.Pointer) {
+    g_logger.Println("FillMainArgs")
     mainArgs.instance = (C.HINSTANCE)(appHandle)
 }
 
-func FillWindowInfo(windowInfo* C.cef_window_info_t, hwnd unsafe.Pointer) {
+func FillWindowInfo(windowInfo *C.cef_window_info_t, hwnd unsafe.Pointer) {
+    g_logger.Println("FillWindowInfo")
     var rect C.RECT
     C.GetWindowRect((C.HWND)(hwnd),
             (*C.struct_tagRECT)(unsafe.Pointer(&rect)))

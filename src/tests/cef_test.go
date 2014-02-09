@@ -14,15 +14,37 @@ package cef_test
 import (
     "testing"
     "cef"
+    "log"
+    "os"
 )
 
+var g_logger *log.Logger = log.New(os.Stdout, "[cef_test] ", log.Lshortfile)
+
+func Test_WorkingDirectory(t *testing.T) {
+    // Change working directory while running tests, otherwise
+    // CEF may have troubles finding the resource pak files.
+    // os.Chdir("./../../Release")
+}
+
+func Test_ExecuteProcess(t *testing.T) {
+    g_logger.Println("Test_ExecuteProcess")
+    // If called for the browser process it will return 
+    // immediately with a value of -1
+    code := cef.ExecuteProcess(nil)
+    g_logger.Println("ExecuteProcess returned:", code)
+}
+
 func Test_Initialize(t *testing.T) {
+    g_logger.Println("Test_Initialize")
     settings := cef.Settings{}
     init := cef.Initialize(settings)
+    g_logger.Println("Initialize() returned:", init)
     if init != 1 {
         t.Errorf("Initialize() returned: %d", init)
     }
 }
+
 func Test_Shutdown(t *testing.T) {
+    g_logger.Println("Test_Shutdown")
     cef.Shutdown()
 }

@@ -22,16 +22,12 @@ to => #define cef_string_t cef_string_utf16_t
 */
 import "C"
 import "unsafe"
-import "os"
+import (
+    "os"
+    "log"
+)
 
-type Settings struct {
-    CachePath string
-    LogSeverity int
-}
-
-type BrowserSettings struct {
-}
-
+var g_logger *log.Logger = log.New(os.Stdout, "[cef] ", log.Lshortfile)
 var g_mainArgs C.struct__cef_main_args_t
 var g_app C.cef_app_t // needs reference counting
 var g_clientHandler C.struct__cef_client_t // needs reference counting
@@ -46,6 +42,16 @@ var g_clientHandler C.struct__cef_client_t // needs reference counting
 // void cef_sandbox_info_destroy(void* sandbox_info);
 var g_sandboxInfo unsafe.Pointer
 
+type Settings struct {
+    CachePath string
+    LogSeverity int
+    ResourcesDirPath string
+    LocalesDirPath string
+}
+
+type BrowserSettings struct {
+}
+
 const (
     LOGSEVERITY_DEFAULT = C.LOGSEVERITY_DEFAULT
     LOGSEVERITY_VERBOSE = C.LOGSEVERITY_VERBOSE
@@ -56,7 +62,12 @@ const (
     LOGSEVERITY_DISABLE = C.LOGSEVERITY_DISABLE
 )
 
-func ExecuteProcess(appHandle unsafe.Pointer) {
+func SetLogger(logger *log.Logger) {
+    g_logger = logger
+}
+
+func ExecuteProcess(appHandle unsafe.Pointer) int {
+    g_logger.Println("ExecuteProcess")
     FillMainArgs(&g_mainArgs, appHandle)
 
     // Sandbox info needs to be passed to both cef_execute_process()
@@ -68,9 +79,11 @@ func ExecuteProcess(appHandle unsafe.Pointer) {
     if (exitCode >= 0) {
         os.Exit(int(exitCode))
     }
+    return int(exitCode)
 }
 
 func Initialize(settings Settings) int {
+    g_logger.Println("Initialize")
     var cefSettings C.struct__cef_settings_t
 
     // cache_path
@@ -83,12 +96,42 @@ func Initialize(settings Settings) int {
     cefSettings.log_severity =
             (C.cef_log_severity_t)(C.int(settings.LogSeverity))
 
+    // resources_dir_path
+    if settings.ResourcesDirPath == "" {
+        //cwd, _ := os.Getwd()
+        //settings.ResourcesDirPath = cwd
+    }
+    if (settings.ResourcesDirPath != "") {
+        g_logger.Println("ResourcesDirPath=", settings.ResourcesDirPath)
+    }
+    var resourcesDirPath *C.char = C.CString(settings.ResourcesDirPath)
+    defer C.free(unsafe.Pointer(resourcesDirPath))
+    C.cef_string_from_utf8(resourcesDirPath, C.strlen(resourcesDirPath),
+            &cefSettings.resources_dir_path)
+
+    // locales_dir_path
+    if settings.LocalesDirPath == "" {
+        //cwd, _ := os.Getwd()
+        //settings.LocalesDirPath = cwd + "/locales"
+    }
+    if (settings.LocalesDirPath != "") {
+        g_logger.Println("LocalesDirPath=", settings.LocalesDirPath)
+    }
+    var localesDirPath *C.char = C.CString(settings.LocalesDirPath)
+    defer C.free(unsafe.Pointer(localesDirPath))
+    C.cef_string_from_utf8(localesDirPath, C.strlen(localesDirPath),
+            &cefSettings.locales_dir_path)
+
+    // no_sandbox
+    cefSettings.no_sandbox = C.int(1)
+
     ret := C.cef_initialize(&g_mainArgs, &cefSettings, nil, g_sandboxInfo)
     return int(ret)
 }
 
 func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings, 
         url string) {
+    g_logger.Println("CreateBrowser, url=", url)
     // windowInfo
     var windowInfo C.cef_window_info_t
     FillWindowInfo(&windowInfo, hwnd)
@@ -120,14 +163,17 @@ func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings,
 }
 
 func RunMessageLoop() {
+    g_logger.Println("RunMessageLoop")
     C.cef_run_message_loop()
 }
 
 func QuitMessageLoop() {
+    g_logger.Println("QuitMessageLoop")
     C.cef_quit_message_loop()
 }
 
 func Shutdown() {
+    g_logger.Println("Shutdown")
     C.cef_shutdown()
     // OFF: cef_sandbox_info_destroy(g_sandboxInfo)
 }

@@ -27,10 +27,11 @@ import (
     "log"
 )
 
-var g_logger *log.Logger = log.New(os.Stdout, "[cef] ", log.Lshortfile)
-var g_mainArgs C.struct__cef_main_args_t
-var g_app C.cef_app_t // needs reference counting
-var g_clientHandler C.struct__cef_client_t // needs reference counting
+var Logger *log.Logger = log.New(os.Stdout, "[cef] ", log.Lshortfile)
+
+var _MainArgs C.struct__cef_main_args_t
+var _App C.cef_app_t // requires reference counting
+var _ClientHandler C.struct__cef_client_t // requires reference counting
 
 // Sandbox is disabled. Including the "cef_sandbox.lib"
 // library results in lots of GCC warnings/errors. It is
@@ -40,7 +41,7 @@ var g_clientHandler C.struct__cef_client_t // needs reference counting
 // these before import "C":
 // void* cef_sandbox_info_create();
 // void cef_sandbox_info_destroy(void* sandbox_info);
-var g_sandboxInfo unsafe.Pointer
+var _SandboxInfo unsafe.Pointer
 
 type Settings struct {
     CachePath string
@@ -63,19 +64,19 @@ const (
 )
 
 func SetLogger(logger *log.Logger) {
-    g_logger = logger
+    Logger = logger
 }
 
 func ExecuteProcess(appHandle unsafe.Pointer) int {
-    g_logger.Println("ExecuteProcess")
-    FillMainArgs(&g_mainArgs, appHandle)
+    Logger.Println("ExecuteProcess, args=", os.Args)
+    FillMainArgs(&_MainArgs, appHandle)
 
     // Sandbox info needs to be passed to both cef_execute_process()
     // and cef_initialize().
-    // OFF: g_sandboxInfo = C.cef_sandbox_info_create()
+    // OFF: _SandboxInfo = C.cef_sandbox_info_create()
 
-    var exitCode C.int = C.cef_execute_process(&g_mainArgs, nil,
-            g_sandboxInfo)
+    var exitCode C.int = C.cef_execute_process(&_MainArgs, nil,
+            _SandboxInfo)
     if (exitCode >= 0) {
         os.Exit(int(exitCode))
     }
@@ -83,7 +84,7 @@ func ExecuteProcess(appHandle unsafe.Pointer) int {
 }
 
 func Initialize(settings Settings) int {
-    g_logger.Println("Initialize")
+    Logger.Println("Initialize")
     var cefSettings C.struct__cef_settings_t
 
     // cache_path
@@ -102,7 +103,7 @@ func Initialize(settings Settings) int {
         //settings.ResourcesDirPath = cwd
     }
     if (settings.ResourcesDirPath != "") {
-        g_logger.Println("ResourcesDirPath=", settings.ResourcesDirPath)
+        Logger.Println("ResourcesDirPath=", settings.ResourcesDirPath)
     }
     var resourcesDirPath *C.char = C.CString(settings.ResourcesDirPath)
     defer C.free(unsafe.Pointer(resourcesDirPath))
@@ -115,7 +116,7 @@ func Initialize(settings Settings) int {
         //settings.LocalesDirPath = cwd + "/locales"
     }
     if (settings.LocalesDirPath != "") {
-        g_logger.Println("LocalesDirPath=", settings.LocalesDirPath)
+        Logger.Println("LocalesDirPath=", settings.LocalesDirPath)
     }
     var localesDirPath *C.char = C.CString(settings.LocalesDirPath)
     defer C.free(unsafe.Pointer(localesDirPath))
@@ -125,13 +126,13 @@ func Initialize(settings Settings) int {
     // no_sandbox
     cefSettings.no_sandbox = C.int(1)
 
-    ret := C.cef_initialize(&g_mainArgs, &cefSettings, nil, g_sandboxInfo)
+    ret := C.cef_initialize(&_MainArgs, &cefSettings, nil, _SandboxInfo)
     return int(ret)
 }
 
 func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings, 
         url string) {
-    g_logger.Println("CreateBrowser, url=", url)
+    Logger.Println("CreateBrowser, url=", url)
     // windowInfo
     var windowInfo C.cef_window_info_t
     FillWindowInfo(&windowInfo, hwnd)
@@ -149,10 +150,10 @@ func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings,
     // https://code.google.com/p/chromiumembedded/wiki/UsingTheCAPI
     // --
     // What about C struct alignment issues in Go?
-    // var refcnt unsafe.Pointer = unsafe.Pointer(&g_clientHandler)
-    // refcnt += (unsafe.Pointer)(unsafe.Sizeof(g_clientHandler[0]))
+    // var refcnt unsafe.Pointer = unsafe.Pointer(&_ClientHandler)
+    // refcnt += (unsafe.Pointer)(unsafe.Sizeof(_ClientHandler[0]))
     // C.InterlockedIncrement(refcnt)
-    // C.InterlockedIncrement(&g_clientHandler{0})
+    // C.InterlockedIncrement(&_ClientHandler{0})
     // C.InterlockedDecrement()
     // --
 
@@ -163,17 +164,17 @@ func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings,
 }
 
 func RunMessageLoop() {
-    g_logger.Println("RunMessageLoop")
+    Logger.Println("RunMessageLoop")
     C.cef_run_message_loop()
 }
 
 func QuitMessageLoop() {
-    g_logger.Println("QuitMessageLoop")
+    Logger.Println("QuitMessageLoop")
     C.cef_quit_message_loop()
 }
 
 func Shutdown() {
-    g_logger.Println("Shutdown")
+    Logger.Println("Shutdown")
     C.cef_shutdown()
-    // OFF: cef_sandbox_info_destroy(g_sandboxInfo)
+    // OFF: cef_sandbox_info_destroy(_SandboxInfo)
 }

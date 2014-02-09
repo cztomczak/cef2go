@@ -46,6 +46,7 @@ var _SandboxInfo unsafe.Pointer
 type Settings struct {
     CachePath string
     LogSeverity int
+    LogFile string
     ResourcesDirPath string
     LocalesDirPath string
 }
@@ -88,6 +89,9 @@ func Initialize(settings Settings) int {
     var cefSettings C.struct__cef_settings_t
 
     // cache_path
+    if (settings.CachePath != "") {
+        Logger.Println("CachePath=", settings.CachePath)
+    }
     var cachePath *C.char = C.CString(settings.CachePath)
     defer C.free(unsafe.Pointer(cachePath))
     C.cef_string_from_utf8(cachePath, C.strlen(cachePath),
@@ -96,6 +100,15 @@ func Initialize(settings Settings) int {
     // log_severity
     cefSettings.log_severity =
             (C.cef_log_severity_t)(C.int(settings.LogSeverity))
+
+    // log_file
+    if (settings.LogFile != "") {
+        Logger.Println("LogFile=", settings.LogFile)
+    }
+    var logFile *C.char = C.CString(settings.LogFile)
+    defer C.free(unsafe.Pointer(logFile))
+    C.cef_string_from_utf8(logFile, C.strlen(logFile),
+            &cefSettings.log_file)
 
     // resources_dir_path
     if settings.ResourcesDirPath == "" {

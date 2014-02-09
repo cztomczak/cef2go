@@ -24,6 +24,7 @@ all:
 	# --
 	# go test -x -work src/tests/cef_test.go
 	go build -o Release/cef2go src/main_linux.go
+	cd Release && ./cef2go && cd ../
 
 clean:
 	clear

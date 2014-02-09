@@ -21,12 +21,7 @@ func main() {
     cef.ExecuteProcess(nil)
 
     settings := cef.Settings{}
-    // settings.CachePath = cwd + "/webcache" // Set to empty to disable
-    exists, _ := DirectoryExists(settings.CachePath)
-    if exists == false && len(settings.CachePath) > 0 {
-        Logger.Println("Creating webcache/ directory")
-        os.Mkdir(settings.CachePath, 0755)
-    }
+    settings.CachePath = cwd + "/webcache" // Set to empty to disable
     settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
     settings.LogFile = cwd + "/debug.log"
     cef.Initialize(settings)
@@ -42,11 +37,4 @@ func main() {
     cef.RunMessageLoop()
     cef.Shutdown()
     os.Exit(0)
-}
-
-func DirectoryExists(path string) (bool, error) {
-    _, err := os.Stat(path)
-    if err == nil { return true, nil }
-    if os.IsNotExist(err) { return false, nil }
-    return false, err
 }

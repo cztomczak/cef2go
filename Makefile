@@ -17,12 +17,7 @@ export CGO_LDFLAGS=-L $(PWD)/Release -lcef -Wl,-rpath,$(PWD)/Release
 all:
 	clear
 	go install cef
-	# Tests fail as of now. It is required that the executable
-	# resides in the same directory that "icudtl.dat" file.
-	# Problem reported to CEF:
-	# http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=11459
-	# --
-	# go test -x -work src/tests/cef_test.go
+	go test src/tests/cef_test.go
 	go build -o Release/cef2go src/main_linux.go
 	cd Release && ./cef2go && cd ../
 

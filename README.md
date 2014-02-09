@@ -55,11 +55,14 @@ Getting started on Windows
 
 Getting started on Linux
 ------------------------
-Linux port NOT yet ready.
-
 1. These instructions work fine with Ubuntu 12.04.3 64-bit
 
 2. Install CEF dependencies:  
    `sudo apt-get install build-essential libgtk2.0-dev libgtkglext1-dev`
 
+3. Download CEF 3 branch 1750 revision 1604 binaries:
+   [cef_binary_notcmalloc_3.1750.1604_linux64.zip]
+   (https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1604/cef_binary_notcmalloc_3.1750.1604_linux64.zip)  
+   Copy Release/* to cef2go/Release
 
+4. Run "make" command.

@@ -89,6 +89,7 @@ func Initialize(settings Settings) int {
     var cefSettings C.struct__cef_settings_t
 
     // cache_path
+    // ----------
     if (settings.CachePath != "") {
         Logger.Println("CachePath=", settings.CachePath)
     }
@@ -98,10 +99,12 @@ func Initialize(settings Settings) int {
             &cefSettings.cache_path)
 
     // log_severity
+    // ------------
     cefSettings.log_severity =
             (C.cef_log_severity_t)(C.int(settings.LogSeverity))
 
     // log_file
+    // --------
     if (settings.LogFile != "") {
         Logger.Println("LogFile=", settings.LogFile)
     }
@@ -111,9 +114,11 @@ func Initialize(settings Settings) int {
             &cefSettings.log_file)
 
     // resources_dir_path
+    // ------------------
     if settings.ResourcesDirPath == "" {
-        //cwd, _ := os.Getwd()
-        //settings.ResourcesDirPath = cwd
+        // Setting this path is required for the tests to run fine.
+        cwd, _ := os.Getwd()
+        settings.ResourcesDirPath = cwd
     }
     if (settings.ResourcesDirPath != "") {
         Logger.Println("ResourcesDirPath=", settings.ResourcesDirPath)
@@ -124,9 +129,11 @@ func Initialize(settings Settings) int {
             &cefSettings.resources_dir_path)
 
     // locales_dir_path
+    // ----------------
     if settings.LocalesDirPath == "" {
-        //cwd, _ := os.Getwd()
-        //settings.LocalesDirPath = cwd + "/locales"
+        // Setting this path is required for the tests to run fine.
+        cwd, _ := os.Getwd()
+        settings.LocalesDirPath = cwd + "/locales"
     }
     if (settings.LocalesDirPath != "") {
         Logger.Println("LocalesDirPath=", settings.LocalesDirPath)
@@ -137,6 +144,7 @@ func Initialize(settings Settings) int {
             &cefSettings.locales_dir_path)
 
     // no_sandbox
+    // ----------
     cefSettings.no_sandbox = C.int(1)
 
     ret := C.cef_initialize(&_MainArgs, &cefSettings, nil, _SandboxInfo)

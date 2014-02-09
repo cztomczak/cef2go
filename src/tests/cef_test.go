@@ -23,7 +23,7 @@ var Logger *log.Logger = log.New(os.Stdout, "[cef_test] ", log.Lshortfile)
 func Test_WorkingDirectory(t *testing.T) {
     // Change working directory while running tests, otherwise
     // CEF may have troubles finding the resource pak files.
-    // os.Chdir("./../../Release")
+    os.Chdir("./../../Release")
 }
 
 func Test_ExecuteProcess(t *testing.T) {

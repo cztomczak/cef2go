@@ -16,6 +16,7 @@ export CGO_LDFLAGS=-L $(PWD)/Release -lcef -Wl,-rpath,$(PWD)/Release
 
 all:
 	clear
+	go install gtk
 	go install cef
 	go test src/tests/cef_test.go
 	go build -o Release/cef2go src/main_linux.go

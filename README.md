@@ -48,8 +48,8 @@ Support development
 
 Both Code contributions and Paypal dontains are welcome.
 [![Donate through Paypal]
-(https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)]
-(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
+(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)]
+(https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)
 
 
 Getting started on Windows

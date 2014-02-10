@@ -180,8 +180,11 @@ func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings,
 
     // Must call synchronously so that a call to WindowResize()
     // works, after this function returns.
-    C.cef_browser_host_create_browser_sync(&windowInfo, nil, &cefUrl,
+    browser := C.cef_browser_host_create_browser_sync(&windowInfo, nil, &cefUrl,
             &cefSettings, nil)
+    if browser == nil {
+        Logger.Println("ERROR: creating browser failed")
+    }
 }
 
 func RunMessageLoop() {

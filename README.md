@@ -38,7 +38,7 @@ Linux example: [releases/tag/v0.11]
 Support development
 -------------------
 
-Both Code contributions and Paypal dontains are welcome.
+Both code contributions and Paypal donations are welcome.
 [![Donate through Paypal]
 (https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)]
 (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)

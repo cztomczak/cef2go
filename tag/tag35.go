@@ -1,4 +1,4 @@
 // Package tag.
 package tag
 
-println('tag35')
+println("tag35")

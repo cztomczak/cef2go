@@ -12,14 +12,14 @@ INC = -I/usr/include/gtk-2.0 \
 	-I/usr/lib/i386-linux-gnu/gtk-2.0/include \
 	-I/usr/lib/i386-linux-gnu/glib-2.0/include
 export CC=gcc $(INC)
-export CGO_LDFLAGS=-L $(PWD)/Release -lcef -Wl,-rpath,$(PWD)/Release
+export CGO_LDFLAGS=-L $(PWD)/Release -lcef
 
 all:
 	clear
 	go install gtk
 	go install cef
-	go test src/tests/cef_test.go
-	go build -o Release/cef2go src/main_linux.go
+	go test -ldflags "-r $(PWD)/Release" src/tests/cef_test.go
+	go build -ldflags "-r ." -o Release/cef2go src/main_linux.go
 	cd Release && ./cef2go && cd ../
 
 clean:

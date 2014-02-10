@@ -9,9 +9,7 @@ cef2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can just provide browser
 capabilities to your application.
 
-Supported platforms: Windows. Linux should appear next.
-OS X a little bit later (see also [go-cef]
-(https://github.com/adieu/go-cef) for OS X).
+Supported platforms: Windows, Linux (OS X not yet ready).
 
 Currently the cef2go example creates just a simple window with
 the Chromium browser embedded. You can set a few options for
@@ -28,11 +26,13 @@ Help
 Ask questions on the [cef2go forum](http://groups.google.com/group/cef2go).
 
 
-Binary example
---------------
-See the cef2go binary example for Windows, works out of the box:
-[cef2go-0.10-example.zip]
-(https://github.com/CzarekTomczak/cef2go/releases/download/v0.10/cef2go-0.10-example.zip)  
+Binary examples
+---------------
+Windows example: [releases/tag/v0.10]
+(https://github.com/CzarekTomczak/cef2go/releases/tag/v0.10)  
+
+Linux example: [releases/tag/v0.11]
+(https://github.com/CzarekTomczak/cef2go/releases/tag/v0.11)  
 
 
 Getting started on Windows
@@ -55,7 +55,8 @@ Getting started on Windows
 
 Getting started on Linux
 ------------------------
-1. These instructions work fine with Ubuntu 12.04.3 64-bit
+1. These instructions work fine with Ubuntu 12.04 64-bit. 
+   May also work with other versions, but were not tested.
 
 2. Install CEF dependencies:  
    `sudo apt-get install build-essential libgtk2.0-dev libgtkglext1-dev`

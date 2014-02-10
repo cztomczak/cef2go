@@ -21,6 +21,14 @@ Javascript.
 cef2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
+Support development
+-------------------
+
+Both code contributions and paypal dontains are welcome.
+[![Donate through Paypal]
+(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)]
+(https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)
+
 Help
 ----
 Ask questions on the [cef2go forum](http://groups.google.com/group/cef2go).
@@ -33,6 +41,15 @@ Windows example: [releases/tag/v0.10]
 
 Linux example: [releases/tag/v0.11]
 (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.11)  
+
+
+Support development
+-------------------
+
+Both Code contributions and Paypal dontains are welcome.
+[![Donate through Paypal]
+(https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)]
+(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
 
 
 Getting started on Windows

@@ -21,14 +21,6 @@ Javascript.
 cef2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
-Support development
--------------------
-
-Both code contributions and paypal dontains are welcome.
-[![Donate through Paypal]
-(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)]
-(https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif)
-
 Help
 ----
 Ask questions on the [cef2go forum](http://groups.google.com/group/cef2go).

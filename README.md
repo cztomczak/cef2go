@@ -35,6 +35,15 @@ Linux example: [releases/tag/v0.11]
 (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.11)  
 
 
+Support development
+-------------------
+
+Both code contributions and Paypal donations are welcome.
+[![Donate through Paypal]
+(https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)]
+(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
+
+
 Getting started on Windows
 --------------------------
 1. Install mingw and add C:\MinGW\bin to PATH. You can install mingw

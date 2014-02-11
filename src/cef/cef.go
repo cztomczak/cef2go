@@ -178,13 +178,19 @@ func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings,
     // C.InterlockedDecrement()
     // --
 
-    // Must call synchronously so that a call to WindowResize()
-    // works, after this function returns.
-    browser := C.cef_browser_host_create_browser_sync(&windowInfo, nil, &cefUrl,
+    // Do not create the browser synchronously using the 
+    // cef_browser_host_create_browser_sync() function, as
+    // it is unreliable. Instead obtain browser object in
+    // life_span_handler::on_after_created. 
+    // --
+    // See Issue 8 "Linux: empty window displayed":
+    // https://github.com/CzarekTomczak/cef2go/issues/8
+    // --
+    // See also related topic on CEF Forum:
+    // "Creating browser failed - race condition?"
+    // http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=11470
+    C.cef_browser_host_create_browser(&windowInfo, nil, &cefUrl,
             &cefSettings, nil)
-    if browser == nil {
-        Logger.Println("ERROR: creating browser failed")
-    }
 }
 
 func RunMessageLoop() {

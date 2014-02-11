@@ -11,6 +11,7 @@ import (
     "syscall"
     "unsafe"
     "log"
+    "time"
 )
 
 var Logger *log.Logger = log.New(os.Stdout, "[main] ", log.Lshortfile)
@@ -31,12 +32,17 @@ func main() {
     hwnd := wingui.CreateWindow("cef2go example", wndproc)
 
     browserSettings := cef.BrowserSettings{}
-    // TODO: It should be executable's directory used,
-    // and not working directory.
+    // TODO: It should be executable's directory used
+    // rather than working directory.
     url, _ := os.Getwd()
     url = "file://" + url + "/example.html"
     cef.CreateBrowser(unsafe.Pointer(hwnd), browserSettings, url)
-    cef.WindowResized(unsafe.Pointer(hwnd))
+
+    // It should be enough to call WindowResized after 10ms,
+    // though to be sure let's extend it to 100ms.
+    time.AfterFunc(time.Millisecond * 100, func(){
+        cef.WindowResized(unsafe.Pointer(hwnd))
+    })
 
     cef.RunMessageLoop()
     cef.Shutdown()

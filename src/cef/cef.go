@@ -189,6 +189,10 @@ func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings,
     // See also related topic on CEF Forum:
     // "Creating browser failed - race condition?"
     // http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=11470
+    // --
+    // UPDATE: issue still persists even when calling the
+    // asynchronous version. But this time instead of empty
+    // window, application quits when browser creation fails.
     C.cef_browser_host_create_browser(&windowInfo, nil, &cefUrl,
             &cefSettings, nil)
 }

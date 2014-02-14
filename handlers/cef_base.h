@@ -5,6 +5,7 @@
 #pragma once
 
 #include "include/capi/cef_base_capi.h"
+#include <stdio.h>
 
 // Set to 1 to check if add_ref() and release()
 // are called and to track the total number of calls.

@@ -101,7 +101,7 @@ Getting started on Mac OS X
 
 5. Download CEF 3 branch 1750 revision 1625 binaries for 32-bit:
    [releases/tag/v0.12]
-   (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)
+   (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)  
    Copy the cef2go.app directory to cef2go/Release.
 
 6. Run "make" command.

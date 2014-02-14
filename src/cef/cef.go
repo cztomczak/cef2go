@@ -19,19 +19,22 @@ to => #define cef_string_t cef_string_utf16_t
 #include <stdlib.h>
 #include "string.h"
 #include "include/capi/cef_app_capi.h"
+#include "handlers/cef_app.h"
+#include "handlers/cef_client.h"
 */
 import "C"
 import "unsafe"
 import (
     "os"
     "log"
+    "runtime"
 )
 
 var Logger *log.Logger = log.New(os.Stdout, "[cef] ", log.Lshortfile)
 
-var _MainArgs C.struct__cef_main_args_t
-var _App C.cef_app_t // requires reference counting
-var _ClientHandler C.struct__cef_client_t // requires reference counting
+var _MainArgs *C.struct__cef_main_args_t
+var _AppHandler *C.cef_app_t // requires reference counting
+var _ClientHandler *C.struct__cef_client_t // requires reference counting
 
 // Sandbox is disabled. Including the "cef_sandbox.lib"
 // library results in lots of GCC warnings/errors. It is
@@ -68,15 +71,30 @@ func SetLogger(logger *log.Logger) {
     Logger = logger
 }
 
+func _InitializeGlobalCStructures() {
+    _MainArgs = (*C.struct__cef_main_args_t)(
+            C.calloc(1, C.sizeof_struct__cef_main_args_t))
+
+    _AppHandler = (*C.cef_app_t)(
+            C.calloc(1, C.sizeof_cef_app_t))
+    C.initialize_app_handler(_AppHandler)
+
+    _ClientHandler = (*C.struct__cef_client_t)(
+            C.calloc(1, C.sizeof_struct__cef_client_t))
+    C.initialize_client_handler(_ClientHandler)
+}
+
 func ExecuteProcess(appHandle unsafe.Pointer) int {
     Logger.Println("ExecuteProcess, args=", os.Args)
-    FillMainArgs(&_MainArgs, appHandle)
+
+    _InitializeGlobalCStructures()
+    FillMainArgs(_MainArgs, appHandle)
 
     // Sandbox info needs to be passed to both cef_execute_process()
     // and cef_initialize().
     // OFF: _SandboxInfo = C.cef_sandbox_info_create()
 
-    var exitCode C.int = C.cef_execute_process(&_MainArgs, nil,
+    var exitCode C.int = C.cef_execute_process(_MainArgs, _AppHandler,
             _SandboxInfo)
     if (exitCode >= 0) {
         os.Exit(int(exitCode))
@@ -86,7 +104,12 @@ func ExecuteProcess(appHandle unsafe.Pointer) int {
 
 func Initialize(settings Settings) int {
     Logger.Println("Initialize")
-    var cefSettings C.struct__cef_settings_t
+
+    // Initialize cef_settings_t structure.
+    var cefSettings *C.struct__cef_settings_t
+    cefSettings = (*C.struct__cef_settings_t)(
+            C.calloc(1, C.sizeof_struct__cef_settings_t))
+    cefSettings.size = C.sizeof_struct__cef_settings_t
 
     // cache_path
     // ----------
@@ -115,7 +138,7 @@ func Initialize(settings Settings) int {
 
     // resources_dir_path
     // ------------------
-    if settings.ResourcesDirPath == "" {
+    if settings.ResourcesDirPath == "" && runtime.GOOS != "darwin" {
         // Setting this path is required for the tests to run fine.
         cwd, _ := os.Getwd()
         settings.ResourcesDirPath = cwd
@@ -130,7 +153,7 @@ func Initialize(settings Settings) int {
 
     // locales_dir_path
     // ----------------
-    if settings.LocalesDirPath == "" {
+    if settings.LocalesDirPath == "" && runtime.GOOS != "darwin" {
         // Setting this path is required for the tests to run fine.
         cwd, _ := os.Getwd()
         settings.LocalesDirPath = cwd + "/locales"
@@ -147,54 +170,40 @@ func Initialize(settings Settings) int {
     // ----------
     cefSettings.no_sandbox = C.int(1)
 
-    ret := C.cef_initialize(&_MainArgs, &cefSettings, nil, _SandboxInfo)
+    ret := C.cef_initialize(_MainArgs, cefSettings, _AppHandler, _SandboxInfo)
     return int(ret)
 }
 
-func CreateBrowser(hwnd unsafe.Pointer, settings BrowserSettings, 
+func CreateBrowser(hwnd unsafe.Pointer, browserSettings BrowserSettings, 
         url string) {
     Logger.Println("CreateBrowser, url=", url)
-    // windowInfo
-    var windowInfo C.cef_window_info_t
-    FillWindowInfo(&windowInfo, hwnd)
+
+    // Initialize cef_window_info_t structure.
+    var windowInfo *C.cef_window_info_t
+    windowInfo = (*C.cef_window_info_t)(
+            C.calloc(1, C.sizeof_cef_window_info_t))
+    FillWindowInfo(windowInfo, hwnd)
     
     // url
-    var cefUrl C.cef_string_t
+    var cefUrl *C.cef_string_t
+    cefUrl = (*C.cef_string_t)(
+            C.calloc(1, C.sizeof_cef_string_t))
     var charUrl *C.char = C.CString(url)
     defer C.free(unsafe.Pointer(charUrl))
-    C.cef_string_from_utf8(charUrl, C.strlen(charUrl), &cefUrl)
+    C.cef_string_from_utf8(charUrl, C.strlen(charUrl), cefUrl)
 
-    // create browser
-    var cefSettings C.struct__cef_browser_settings_t
+    // Initialize cef_browser_settings_t structure.
+    var cefBrowserSettings *C.struct__cef_browser_settings_t
+    cefBrowserSettings = (*C.struct__cef_browser_settings_t)(
+            C.calloc(1, C.sizeof_struct__cef_browser_settings_t))
+    cefBrowserSettings.size = C.sizeof_struct__cef_browser_settings_t
     
-    // TODO: reference counting, see:
-    // https://code.google.com/p/chromiumembedded/wiki/UsingTheCAPI
-    // --
-    // What about C struct alignment issues in Go?
-    // var refcnt unsafe.Pointer = unsafe.Pointer(&_ClientHandler)
-    // refcnt += (unsafe.Pointer)(unsafe.Sizeof(_ClientHandler[0]))
-    // C.InterlockedIncrement(refcnt)
-    // C.InterlockedIncrement(&_ClientHandler{0})
-    // C.InterlockedDecrement()
-    // --
-
     // Do not create the browser synchronously using the 
     // cef_browser_host_create_browser_sync() function, as
     // it is unreliable. Instead obtain browser object in
     // life_span_handler::on_after_created. 
-    // --
-    // See Issue 8 "Linux: empty window displayed":
-    // https://github.com/CzarekTomczak/cef2go/issues/8
-    // --
-    // See also related topic on CEF Forum:
-    // "Creating browser failed - race condition?"
-    // http://www.magpcss.org/ceforum/viewtopic.php?f=6&t=11470
-    // --
-    // UPDATE: issue still persists even when calling the
-    // asynchronous version. But this time instead of empty
-    // window, application quits when browser creation fails.
-    C.cef_browser_host_create_browser(&windowInfo, nil, &cefUrl,
-            &cefSettings, nil)
+    C.cef_browser_host_create_browser(windowInfo, _ClientHandler, cefUrl,
+            cefBrowserSettings, nil)
 }
 
 func RunMessageLoop() {

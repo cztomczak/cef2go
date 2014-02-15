@@ -130,6 +130,16 @@ func ExecuteProcess(appHandle unsafe.Pointer) int {
 func Initialize(settings Settings) int {
     Logger.Println("Initialize")
 
+    if _MainArgs == nil {
+        // _MainArgs structure is initialized and filled in ExecuteProcess.
+        // If cef_execute_process is not called, and there is a call
+        // to cef_initialize, then it would result in creation of infinite
+        // number of processes. See Issue 1199 in CEF:
+        // https://code.google.com/p/chromiumembedded/issues/detail?id=1199
+        Logger.Println("ERROR: missing a call to ExecuteProcess")
+        return 0
+    }
+
     // Initialize cef_settings_t structure.
     var cefSettings *C.struct__cef_settings_t
     cefSettings = (*C.struct__cef_settings_t)(

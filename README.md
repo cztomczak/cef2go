@@ -27,9 +27,9 @@ Communicate between Go and Javascript
 -------------------------------------
 For now to make the communication between Go and javascript possible
 you will have to run an internal http server and communicate using 
-XMLHttpRequests in javascript (see the [http_server_windows.go]
+XMLHttpRequests in javascript. See the [http_server_windows.go]
 (https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
-example (to run type "build.bat http_server").
+example. To run it type "build.bat http_server".
 
 
 Help

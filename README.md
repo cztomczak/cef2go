@@ -17,14 +17,14 @@ your application like the cache directory. More advanced bindings
 are in plans, and that includes javascript bindings and callbacks, so
 that you can have bidirectional communication between Go and
 Javascript in a native way. Though, it is already possible to
-communicate between Go and Javascript, see the next section for
+communicate with Go from Javascript, see the next section for
 an example.
 
 CEF2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
-Communicate between Go and Javascript
--------------------------------------
+Communication between Go and Javascript
+---------------------------------------
 For now to make communication between Go and javascript possible
 you have to run an internal http server and communicate using 
 XMLHttpRequests in javascript. See the [http_server_windows.go]

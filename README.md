@@ -36,7 +36,12 @@ the outside, it can be accessed only from the machine it is running on.
 
 Help
 ----
-Ask questions on the [CEF2go Forum](http://groups.google.com/group/cef2go).
+Ask questions on the [CEF2go Forum](http://groups.google.com/group/cef2go).  
+See the auto generated docs for the following packages:
+ * [cef](https://godoc.org/github.com/CzarekTomczak/cef2go/src/cef)
+ * [cocoa](https://godoc.org/github.com/CzarekTomczak/cef2go/src/cocoa)
+ * [gtk](https://godoc.org/github.com/CzarekTomczak/cef2go/src/gtk)
+ * [wingui](https://godoc.org/github.com/CzarekTomczak/cef2go/src/wingui)
 
 
 Binary examples

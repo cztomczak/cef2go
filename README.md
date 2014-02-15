@@ -16,7 +16,12 @@ the Chromium browser embedded. You can set a few options for
 your application like the cache directory. More advanced bindings
 are in plans, and that includes javascript bindings and callbacks, so
 that you can have bidirectional communication between Go and
-Javascript.
+Javascript in a native way. For now to make the communication
+between Go and javascript possible you will have to run an internal
+http server and communicate using XMLHttpRequests in javascript (
+see the [http_server_windows.go]
+(https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
+example (to run type "build.bat http_server").
 
 CEF2go is licensed under the BSD 3-clause license, see the LICENSE
 file.

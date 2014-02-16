@@ -236,7 +236,13 @@ func CreateBrowser(hwnd unsafe.Pointer, browserSettings BrowserSettings,
     // Do not create the browser synchronously using the 
     // cef_browser_host_create_browser_sync() function, as
     // it is unreliable. Instead obtain browser object in
-    // life_span_handler::on_after_created. 
+    // life_span_handler::on_after_created. In that callback
+    // keep CEF browser objects in a global map (cef window
+    // handle -> cef browser) and introduce
+    // a GetBrowserByWindowHandle() function. This function
+    // will first guess the CEF window handle using for example
+    // WinAPI functions and then search the global map of cef
+    // browser objects.
     C.cef_browser_host_create_browser(windowInfo, _ClientHandler, cefUrl,
             cefBrowserSettings, nil)
 }

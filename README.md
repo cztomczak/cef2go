@@ -29,9 +29,11 @@ For now to make communication between Go and javascript possible
 you have to run an internal http server and communicate using 
 XMLHttpRequests in javascript. See the [http_server_windows.go]
 (https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
-example. To run it type "build.bat http_server". The http server
-is listening at 127.0.0.1:54007, thus it is not accessible from
-the outside, it can be accessed only from the machine it is running on.
+example that embeds both a http server and a Chromium browser
+in a standalone application. To run it type "build.bat http_server". 
+The http server is listening at 127.0.0.1:54007, thus it is not 
+accessible from the outside, it can be accessed only from the 
+machine it is running on.
 
 
 Help

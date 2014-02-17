@@ -48,6 +48,11 @@ See the auto generated docs for the following packages:
 
 Binary examples
 ---------------
+The binary examples provided here use branch 1750 (Chrome 33), 
+which is the Beta channel of Google Chrome. A stable release of branch
+1750 should appear at the beginning of March. Then these examples
+should be updated.
+
 Windows example: [releases/tag/v0.10]
 (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.10)  
 

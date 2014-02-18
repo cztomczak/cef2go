@@ -20,7 +20,7 @@
 // implementation will be used.
 ///
 
-struct CEF_CALLBACK _cef_context_menu_handler_t* get_context_menu_handler(
+struct _cef_context_menu_handler_t* CEF_CALLBACK get_context_menu_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_context_menu_handler\n");
     return NULL;
@@ -30,7 +30,7 @@ struct CEF_CALLBACK _cef_context_menu_handler_t* get_context_menu_handler(
 // Return the handler for dialogs. If no handler is provided the default
 // implementation will be used.
 ///
-struct CEF_CALLBACK _cef_dialog_handler_t* get_dialog_handler(
+struct _cef_dialog_handler_t* CEF_CALLBACK get_dialog_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_dialog_handler\n");
     return NULL;
@@ -39,7 +39,7 @@ struct CEF_CALLBACK _cef_dialog_handler_t* get_dialog_handler(
 ///
 // Return the handler for browser display state events.
 ///
-struct CEF_CALLBACK _cef_display_handler_t* get_display_handler(
+struct _cef_display_handler_t* CEF_CALLBACK get_display_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_display_handler\n");
     return NULL;
@@ -49,7 +49,7 @@ struct CEF_CALLBACK _cef_display_handler_t* get_display_handler(
 // Return the handler for download events. If no handler is returned downloads
 // will not be allowed.
 ///
-struct CEF_CALLBACK _cef_download_handler_t* get_download_handler(
+struct _cef_download_handler_t* CEF_CALLBACK get_download_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_download_handler\n");
     return NULL;
@@ -58,7 +58,7 @@ struct CEF_CALLBACK _cef_download_handler_t* get_download_handler(
 ///
 // Return the handler for drag events.
 ///
-struct CEF_CALLBACK _cef_drag_handler_t* get_drag_handler(
+struct _cef_drag_handler_t* CEF_CALLBACK get_drag_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_drag_handler\n");
     return NULL;
@@ -67,7 +67,7 @@ struct CEF_CALLBACK _cef_drag_handler_t* get_drag_handler(
 ///
 // Return the handler for focus events.
 ///
-struct CEF_CALLBACK _cef_focus_handler_t* get_focus_handler(
+struct _cef_focus_handler_t* CEF_CALLBACK get_focus_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_focus_handler\n");
     return NULL;
@@ -77,7 +77,7 @@ struct CEF_CALLBACK _cef_focus_handler_t* get_focus_handler(
 // Return the handler for geolocation permissions requests. If no handler is
 // provided geolocation access will be denied by default.
 ///
-struct CEF_CALLBACK _cef_geolocation_handler_t* get_geolocation_handler(
+struct _cef_geolocation_handler_t* CEF_CALLBACK get_geolocation_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_geolocation_handler\n");
     return NULL;
@@ -87,7 +87,7 @@ struct CEF_CALLBACK _cef_geolocation_handler_t* get_geolocation_handler(
 // Return the handler for JavaScript dialogs. If no handler is provided the
 // default implementation will be used.
 ///
-struct CEF_CALLBACK _cef_jsdialog_handler_t* get_jsdialog_handler(
+struct _cef_jsdialog_handler_t* CEF_CALLBACK get_jsdialog_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_jsdialog_handler\n");
     return NULL;
@@ -96,7 +96,7 @@ struct CEF_CALLBACK _cef_jsdialog_handler_t* get_jsdialog_handler(
 ///
 // Return the handler for keyboard events.
 ///
-struct CEF_CALLBACK _cef_keyboard_handler_t* get_keyboard_handler(
+struct _cef_keyboard_handler_t* CEF_CALLBACK get_keyboard_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_keyboard_handler\n");
     return NULL;
@@ -105,7 +105,7 @@ struct CEF_CALLBACK _cef_keyboard_handler_t* get_keyboard_handler(
 ///
 // Return the handler for browser life span events.
 ///
-struct CEF_CALLBACK _cef_life_span_handler_t* get_life_span_handler(
+struct _cef_life_span_handler_t* CEF_CALLBACK get_life_span_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_life_span_handler\n");
     return NULL;
@@ -114,7 +114,7 @@ struct CEF_CALLBACK _cef_life_span_handler_t* get_life_span_handler(
 ///
 // Return the handler for browser load status events.
 ///
-struct CEF_CALLBACK _cef_load_handler_t* get_load_handler(
+struct _cef_load_handler_t* CEF_CALLBACK get_load_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_load_handler\n");
     return NULL;
@@ -123,7 +123,7 @@ struct CEF_CALLBACK _cef_load_handler_t* get_load_handler(
 ///
 // Return the handler for off-screen rendering events.
 ///
-struct CEF_CALLBACK _cef_render_handler_t* get_render_handler(
+struct _cef_render_handler_t* CEF_CALLBACK get_render_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_render_handler\n");
     return NULL;
@@ -132,7 +132,7 @@ struct CEF_CALLBACK _cef_render_handler_t* get_render_handler(
 ///
 // Return the handler for browser request events.
 ///
-struct CEF_CALLBACK _cef_request_handler_t* get_request_handler(
+struct _cef_request_handler_t* CEF_CALLBACK get_request_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_request_handler\n");
     return NULL;

@@ -63,7 +63,7 @@ void initialize_cef_base(cef_base_t* base) {
     // Let's print the size in case sizeof was used
     // on a pointer instead of a structure. In such
     // case the number will be very high.
-    printf("cef_base_t.size = %lu\n", size);
+    printf("cef_base_t.size = %lu\n", (unsigned long)size);
     if (size <= 0) {
         printf("FATAL: initialize_cef_base failed, size member not set\n");
         _exit(1);

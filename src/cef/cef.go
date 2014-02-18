@@ -7,11 +7,17 @@ package cef
 /*
 CEF capi fixes
 --------------
-
-In cef_string.h:
-this => typedef cef_string_utf16_t cef_string_t;
-to => #define cef_string_t cef_string_utf16_t
-
+1. In cef_string.h:
+    this => typedef cef_string_utf16_t cef_string_t;
+    to => #define cef_string_t cef_string_utf16_t
+2. In cef_export.h:
+    #elif defined(COMPILER_GCC)
+    #define CEF_EXPORT __attribute__ ((visibility("default")))
+    #ifdef OS_WIN
+    #define CEF_CALLBACK __stdcall
+    #else
+    #define CEF_CALLBACK
+    #endif
 */
 
 /*
@@ -75,38 +81,13 @@ func _InitializeGlobalCStructures() {
     _MainArgs = (*C.struct__cef_main_args_t)(
             C.calloc(1, C.sizeof_struct__cef_main_args_t))
 
-    // Some bug in Go on Windows: "unexpected fault address 0xffffffff".
-    // Happens in cef_execute_process() when initialize_app_handler() 
-    // or initialize_client_handler() are called here. This same code 
-    // works perfectly fine on Linux and OS X. From the logs:
-        // [cef] cef.go:88: ExecuteProcess, args= [cef2go.exe]
-        // initialize_app_handler
-        // initialize_cef_base
-        // cef_base_t.size = 36
-        // initialize_client_handler
-        // initialize_cef_base
-        // cef_base_t.size = 72
-        // [cef] cef_windows.go:19: FillMainArgs
-        // cef_base_t.add_ref
-        // unexpected fault address 0xffffffff
-        // fatal error: fault
-    // So it looks like the problem occurs after the first call to
-    // add_ref made by CEF.
-    // Maybe that's the bug - some problem during linking:
-    // "cmd/ld: order of files in archives matters on Windows"
-    // https://code.google.com/p/go/issues/detail?id=2601
-
     _AppHandler = (*C.cef_app_t)(
             C.calloc(1, C.sizeof_cef_app_t))
-    if runtime.GOOS != "windows" {
-        C.initialize_app_handler(_AppHandler)
-    }
+    C.initialize_app_handler(_AppHandler)
 
     _ClientHandler = (*C.struct__cef_client_t)(
             C.calloc(1, C.sizeof_struct__cef_client_t))
-    if runtime.GOOS != "windows" {
-        C.initialize_client_handler(_ClientHandler)
-    }
+    C.initialize_client_handler(_ClientHandler)
 }
 
 func ExecuteProcess(appHandle unsafe.Pointer) int {

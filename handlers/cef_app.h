@@ -51,8 +51,8 @@ void CEF_CALLBACK on_register_custom_schemes(
 // If no handler is returned resources will be loaded from pack files. This
 // function is called by the browser and render processes on multiple threads.
 ///
-struct CEF_CALLBACK _cef_resource_bundle_handler_t* 
-        get_resource_bundle_handler(struct _cef_app_t* self) {
+struct _cef_resource_bundle_handler_t*
+        CEF_CALLBACK get_resource_bundle_handler(struct _cef_app_t* self) {
     DEBUG_CALLBACK("get_resource_bundle_handler\n");
     return NULL;
 }
@@ -61,8 +61,8 @@ struct CEF_CALLBACK _cef_resource_bundle_handler_t*
 // Return the handler for functionality specific to the browser process. This
 // function is called on multiple threads in the browser process.
 ///
-struct CEF_CALLBACK _cef_browser_process_handler_t* 
-        get_browser_process_handler(struct _cef_app_t* self) {
+struct _cef_browser_process_handler_t* 
+        CEF_CALLBACK get_browser_process_handler(struct _cef_app_t* self) {
     DEBUG_CALLBACK("get_browser_process_handler\n");
     return NULL;
 }
@@ -71,8 +71,8 @@ struct CEF_CALLBACK _cef_browser_process_handler_t*
 // Return the handler for functionality specific to the render process. This
 // function is called on the render process main thread.
 ///
-struct CEF_CALLBACK _cef_render_process_handler_t* get_render_process_handler(
-        struct _cef_app_t* self) {
+struct _cef_render_process_handler_t*
+        CEF_CALLBACK get_render_process_handler(struct _cef_app_t* self) {
     DEBUG_CALLBACK("get_render_process_handler\n");
     return NULL;
 }

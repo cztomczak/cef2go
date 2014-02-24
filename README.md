@@ -87,7 +87,8 @@ Getting started on Windows
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 
-3. Run build.bat
+3. Run build.bat (or "build.bat noconsole" to get rid of the console
+    window when running the final executable)
 
 
 Getting started on Linux

@@ -17,23 +17,18 @@ your application like the cache directory. More advanced bindings
 are in plans, and that includes javascript bindings and callbacks, so
 that you can have bidirectional communication between Go and
 Javascript in a native way. Though, it is already possible to
-communicate with Go from Javascript, see the next section for
-an example.
+communicate with Go from Javascript, see the "Communication 
+between Go and Javascript" section further down this page.
 
 CEF2go is licensed under the BSD 3-clause license, see the LICENSE
 file.
 
-Communication between Go and Javascript
----------------------------------------
-For now to make communication between Go and javascript possible
-you have to run an internal http server and communicate using 
-XMLHttpRequests in javascript. See the [http_server_windows.go]
-(https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
-example that embeds both a http server and a Chromium browser
-in a standalone application. To run it type "build.bat http_server". 
-The http server is listening at 127.0.0.1:54007, thus it is not 
-accessible from the outside, it can be accessed only from the 
-machine it is running on.
+
+Compatibility
+-------------
+CEF2go was tested and works fine with Go 1.2. There may be some issues 
+with Go 1.3 due to BC break, see [Issue #15]
+(https://github.com/CzarekTomczak/cef2go/issues/15).
 
 
 Help
@@ -70,6 +65,19 @@ Both code contributions and Paypal donations are welcome.
 [![Donate through Paypal]
 (https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)]
 (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
+
+
+Communication between Go and Javascript
+---------------------------------------
+For now to make communication between Go and javascript possible
+you have to run an internal http server and communicate using 
+XMLHttpRequests in javascript. See the [http_server_windows.go]
+(https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
+example that embeds both a http server and a Chromium browser
+in a standalone application. To run it type "build.bat http_server". 
+The http server is listening at 127.0.0.1:54007, thus it is not 
+accessible from the outside, it can be accessed only from the 
+machine it is running on.
 
 
 Getting started on Windows

@@ -1,5 +1,22 @@
-CEF2go - HTML 5 based GUI toolkit for the Go language
-=====================================================
+CEF2go
+======
+
+Table of contents:
+ * [Introduction](#introduction)
+ * [Compatibility](#compatibility)
+ * [Binary examples](#binary-examples)
+ * [Help](#help)
+ * [Support Development](#support-development)
+ * [Forks worth a look](#forks-worth-a-look)
+ * [Communication between Go and Javascript]
+    (#communication-between-go-and-javascript)
+ * [Getting started on Windows](#getting-started-on-windows)
+ * [Getting started on Linux](#getting-started-on-linux)
+ * [Getting started on Mac OS X](#getting-started-on-mac-os-x)
+
+
+Introduction
+------------
 
 CEF2go is an open source project founded by [Czarek Tomczak]
 (http://www.linkedin.com/in/czarektomczak) in 2014
@@ -8,8 +25,6 @@ to provide Go bindings for the [Chromium Embedded Framework]
 CEF2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can provide browser
 capabilities to your application.
-
-Supported platforms: Windows, Linux, Mac OSX.
 
 Currently the CEF2go example creates just a simple window with
 the Chromium browser embedded. You can set a few options for
@@ -26,27 +41,17 @@ file.
 
 Compatibility
 -------------
+Supported platforms: Windows, Linux, Mac OSX.
+
 CEF2go was tested and works fine with Go 1.2. There may be some issues 
 with Go 1.3 due to BC break, see [Issue #15]
 (https://github.com/CzarekTomczak/cef2go/issues/15).
 
 
-Help
-----
-Ask questions on the [CEF2go Forum](http://groups.google.com/group/cef2go).  
-See the auto generated docs for the following packages:
- * [cef](https://godoc.org/github.com/CzarekTomczak/cef2go/src/cef)
- * [cocoa](https://godoc.org/github.com/CzarekTomczak/cef2go/src/cocoa)
- * [gtk](https://godoc.org/github.com/CzarekTomczak/cef2go/src/gtk)
- * [wingui](https://godoc.org/github.com/CzarekTomczak/cef2go/src/wingui)
-
-
 Binary examples
 ---------------
-The binary examples provided here use branch 1750 (Chrome 33), 
-which is the Beta channel of Google Chrome. A stable release of branch
-1750 should appear at the beginning of March. Then these examples
-should be updated.
+The binary examples provided here use CEF 3 branch 1750 (Chrome 33
+beta channel as of build time).
 
 Windows example: [releases/tag/v0.10]
 (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.10)  
@@ -58,6 +63,19 @@ Mac OSX example: [releases/tag/v0.12]
 (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)
 
 
+Help
+----
+Having problems or questions? Go to the [CEF2go Forum]
+(http://groups.google.com/group/cef2go). Please do not use Issue 
+Tracker for asking questions.
+
+See the auto generated docs for the following packages:
+ * [cef](https://godoc.org/github.com/CzarekTomczak/cef2go/src/cef)
+ * [cocoa](https://godoc.org/github.com/CzarekTomczak/cef2go/src/cocoa)
+ * [gtk](https://godoc.org/github.com/CzarekTomczak/cef2go/src/gtk)
+ * [wingui](https://godoc.org/github.com/CzarekTomczak/cef2go/src/wingui)
+
+
 Support development
 -------------------
 
@@ -65,6 +83,21 @@ Both code contributions and Paypal donations are welcome.
 [![Donate through Paypal]
 (https://raw2.github.com/CzarekTomczak/cef2go/master/donate.gif)]
 (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
+
+
+Forks worth a look
+------------------
+ * [fromkeith/cef2go](https://github.com/fromkeith/cef2go)
+    * Adds support for client handlers (eg. Display, LifeSpan, Request,
+    Resource, Scheme, Download).
+    * Exposes new objects (eg. Browser, Frame, Request, Response). 
+    * Tested only on Windows.
+ * [paperlesspost/cef2go](https://github.com/paperlesspost/cef2go)
+    * Adds suport for a few client handlers including Render handler
+    (off-screen rendering to a raw pixel buffer). 
+    * Implements V8 callbacks for native communication from Javascript
+    to Go.
+    * Tested only on Linux.
 
 
 Communication between Go and Javascript

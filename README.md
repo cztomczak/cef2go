@@ -185,7 +185,7 @@ the community? Talk about it on the [CEF2go Forum]
 
 Familiar with Python or PHP?
 ----------------------------
-Author of CEF2go is also working on CEF bindings
+The author of CEF2go is also working on CEF bindings
 for other languages. For Python see the [CEF Python]
 (https://code.google.com/p/cefpython/) project. For PHP see the 
 [PHP Desktop](https://code.google.com/p/phpdesktop/) project.

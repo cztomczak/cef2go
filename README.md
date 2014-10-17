@@ -13,8 +13,8 @@ Table of contents:
  * [Getting started on Windows](#getting-started-on-windows)
  * [Getting started on Linux](#getting-started-on-linux)
  * [Getting started on Mac OS X](#getting-started-on-mac-os-x)
- * [Built a cool app?](#built-a-cool-app?)
- * [Familiar with Python or PHP?](#familiar-with-python-or-php?)
+ * [Built a cool app?](#built-a-cool-app)
+ * [Familiar with Python or PHP?](#familiar-with-python-or-php)
 
 
 Introduction

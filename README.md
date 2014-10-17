@@ -13,6 +13,8 @@ Table of contents:
  * [Getting started on Windows](#getting-started-on-windows)
  * [Getting started on Linux](#getting-started-on-linux)
  * [Getting started on Mac OS X](#getting-started-on-mac-os-x)
+ * [Built a cool app?](#built-a-cool-app?)
+ * [Familiar with Python or PHP?](#familiar-with-python-or-php?)
 
 
 Introduction
@@ -172,3 +174,19 @@ Getting started on Mac OS X
    Copy the cef2go.app directory to cef2go/Release.
 
 6. Run "make" command.
+
+
+Built a cool app?
+-----------------
+Built a cool app using CEF2go and would like to share info with
+the community? Talk about it on the [CEF2go Forum]
+(http://groups.google.com/group/cef2go).
+
+
+Familiar with Python or PHP?
+----------------------------
+Author of CEF2go is also working is also working on CEF bindings
+for other languages. For Python see the [CEF Python]
+(https://code.google.com/p/cefpython/) project. For PHP see the 
+[PHP Desktop](https://code.google.com/p/phpdesktop/) project.
+

@@ -45,9 +45,7 @@ Compatibility
 -------------
 Supported platforms: Windows, Linux, Mac OSX.
 
-CEF2go was tested and works fine with Go 1.2. There may be some issues 
-with Go 1.3 due to BC break, see [Issue #15]
-(https://github.com/CzarekTomczak/cef2go/issues/15).
+CEF2go was tested and works fine with Go 1.2.
 
 
 Binary examples

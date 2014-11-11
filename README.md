@@ -45,7 +45,7 @@ Compatibility
 -------------
 Supported platforms: Windows, Linux, Mac OSX.
 
-CEF2go was tested and works fine with Go 1.2.
+CEF2go was tested and works fine with Go 1.2 / Go 1.3.3.
 
 
 Binary examples
@@ -115,20 +115,23 @@ machine it is running on.
 
 Getting started on Windows
 --------------------------
-1. Install mingw and add C:\MinGW\bin to PATH. You can install mingw
+1. Install Go 32-bit. CEF 64-bit binaries are still experimental and
+   were not tested.
+
+2. Install mingw 32-bit and add C:\MinGW\bin to PATH. You can install mingw
    using [mingw-get-setup.exe]
    (http://sourceforge.net/projects/mingw/files/Installer/).
    Select packages to install: "mingw-developer-toolkit",
    "mingw32-base", "msys-base". CEF2go was tested and works fine
    with GCC 4.8.2. You can check gcc version with "gcc --version".
 
-2. Download CEF 3 branch 1750 revision 1590 binaries:
+3. Download CEF 3 branch 1750 revision 1590 binaries:
    [cef_binary_3.1750.1590_windows32.7z]
    (https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)  
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 
-3. Run build.bat (or "build.bat noconsole" to get rid of the console
+4. Run build.bat (or "build.bat noconsole" to get rid of the console
     window when running the final executable)
 
 

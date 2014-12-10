@@ -138,7 +138,10 @@ Getting started on Windows
 Getting started on Linux
 ------------------------
 1. These instructions work fine with Ubuntu 12.04 64-bit. 
-   May also work with other versions, but were not tested.
+   On Ubuntu 13/14 libudev.so.0 is missing and it is required to 
+   create a symbolic link to libudev.so.1. For example on 
+   Ubuntu 14.04 64-bit run this command: 
+  `cd /lib/x86_64-linux-gnu/ && sudo ln -sf libudev.so.1 libudev.so.0`.
 
 2. Install CEF dependencies:  
    `sudo apt-get install build-essential libgtk2.0-dev libgtkglext1-dev`

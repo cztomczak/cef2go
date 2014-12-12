@@ -19,7 +19,7 @@ ifeq ($(UNAME_S), Linux)
 		-I/usr/lib64/gtk-2.0/include
 	export CC=gcc $(INC)
 	export CGO_LDFLAGS=-L $(PWD)/Release -lcef
-else ifeq($(UNAME_S), Darwin)
+else ifeq ($(UNAME_S), Darwin)
 	INC=-I.
 	export CGO_ENABLED=1
 	export CC=clang $(INC)

@@ -84,6 +84,12 @@ Both code contributions and Paypal donations are welcome.
 (https://raw.githubusercontent.com/CzarekTomczak/cef2go/master/donate.gif)]
 (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
 
+Thanks to those who have made a Paypal donation:
+- David Witten
+
+Thanks to those that have donated their time through code contributions:
+- No one yet, you can be the first one! 
+
 
 Forks worth a look
 ------------------

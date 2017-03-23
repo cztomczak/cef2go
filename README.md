@@ -8,8 +8,7 @@ Table of contents:
  * [Help](#help)
  * [Support Development](#support-development)
  * [Forks worth a look](#forks-worth-a-look)
- * [Communication between Go and Javascript]
-    (#communication-between-go-and-javascript)
+ * [Communication between Go and Javascript](#communication-between-go-and-javascript)
  * [Getting started on Windows](#getting-started-on-windows)
  * [Getting started on Linux](#getting-started-on-linux)
  * [Getting started on Mac OS X](#getting-started-on-mac-os-x)
@@ -20,10 +19,8 @@ Table of contents:
 Introduction
 ------------
 
-CEF2go is an open source project founded by [Czarek Tomczak]
-(http://www.linkedin.com/in/czarektomczak) in 2014
-to provide Go bindings for the [Chromium Embedded Framework]
-(https://code.google.com/p/chromiumembedded/) (CEF).
+CEF2go is an open source project founded by [Czarek Tomczak](http://www.linkedin.com/in/czarektomczak) in 2014
+to provide Go bindings for the [Chromium Embedded Framework](https://code.google.com/p/chromiumembedded/) (CEF).
 CEF2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can provide browser
 capabilities to your application.
@@ -53,20 +50,16 @@ Binary examples
 The binary examples provided here use CEF 3 branch 1750 (Chrome 33
 beta channel as of build time).
 
-Windows example: [releases/tag/v0.10]
-(https://github.com/CzarekTomczak/cef2go/releases/tag/v0.10)  
+Windows example: [releases/tag/v0.10](https://github.com/CzarekTomczak/cef2go/releases/tag/v0.10)  
 
-Linux example: [releases/tag/v0.11]
-(https://github.com/CzarekTomczak/cef2go/releases/tag/v0.11)  
+Linux example: [releases/tag/v0.11](https://github.com/CzarekTomczak/cef2go/releases/tag/v0.11)  
 
-Mac OSX example: [releases/tag/v0.12]
-(https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)
+Mac OSX example: [releases/tag/v0.12](https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)
 
 
 Help
 ----
-Having problems or questions? Go to the [CEF2go Forum]
-(http://groups.google.com/group/cef2go). Please do not use Issue 
+Having problems or questions? Go to the [CEF2go Forum](http://groups.google.com/group/cef2go). Please do not use Issue 
 Tracker for asking questions.
 
 See the auto generated docs for the following packages:
@@ -80,9 +73,7 @@ Support development
 -------------------
 
 Both code contributions and Paypal donations are welcome.
-[![Donate through Paypal]
-(https://raw.githubusercontent.com/CzarekTomczak/cef2go/master/donate.gif)]
-(https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
+[![Donate through Paypal](https://raw.githubusercontent.com/CzarekTomczak/cef2go/master/donate.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9CAMRSA48UVT8)
 
 Thanks to those who have made a Paypal donation:
 - David Witten
@@ -110,8 +101,7 @@ Communication between Go and Javascript
 ---------------------------------------
 For now to make communication between Go and javascript possible
 you have to run an internal http server and communicate using 
-XMLHttpRequests in javascript. See the [http_server_windows.go]
-(https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
+XMLHttpRequests in javascript. See the [http_server_windows.go](https://github.com/CzarekTomczak/cef2go/blob/master/src/http_server_windows.go)
 example that embeds both a http server and a Chromium browser
 in a standalone application. To run it type "build.bat http_server". 
 The http server is listening at 127.0.0.1:54007, thus it is not 
@@ -125,15 +115,13 @@ Getting started on Windows
    were not tested.
 
 2. Install mingw 32-bit and add C:\MinGW\bin to PATH. You can install mingw
-   using [mingw-get-setup.exe]
-   (http://sourceforge.net/projects/mingw/files/Installer/).
+   using [mingw-get-setup.exe](http://sourceforge.net/projects/mingw/files/Installer/).
    Select packages to install: "mingw-developer-toolkit",
    "mingw32-base", "msys-base". CEF2go was tested and works fine
    with GCC 4.8.2. You can check gcc version with "gcc --version".
 
 3. Download CEF 3 branch 1750 revision 1590 binaries:
-   [cef_binary_3.1750.1590_windows32.7z]
-   (https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)  
+   [cef_binary_3.1750.1590_windows32.7z](https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)  
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 
@@ -153,8 +141,7 @@ Getting started on Linux
    `sudo apt-get install build-essential libgtk2.0-dev libgtkglext1-dev`
 
 3. Download CEF 3 branch 1750 revision 1604 binaries:
-   [cef_binary_notcmalloc_3.1750.1604_linux64.zip]
-   (https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1604/cef_binary_notcmalloc_3.1750.1604_linux64.zip)  
+   [cef_binary_notcmalloc_3.1750.1604_linux64.zip](https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1604/cef_binary_notcmalloc_3.1750.1604_linux64.zip)  
    Copy Release/* to cef2go/Release
 
 4. Run "make" command.
@@ -168,8 +155,7 @@ Getting started on Mac OS X
 2. Install Go 32-bit. Tested with Go 1.2-386 for OSX 10.8.
    CEF binaries for OSX 64-bit are still experimental, that's
    why we're using 32-bit. Though you can try building with
-   CEF 64-bit, download binaries from [cefbuilds.com]
-   (http://cefbuilds.com).
+   CEF 64-bit, download binaries from [cefbuilds.com](http://cefbuilds.com).
 
 3. Install command line tools (make is required) from:  
    https://developer.apple.com/downloads/  
@@ -179,8 +165,7 @@ Getting started on Mac OS X
    Use the link above. In my case it was XCode 4.6.3 from June 2013.
 
 5. Download CEF 3 branch 1750 revision 1625 binaries for 32-bit:
-   [releases/tag/v0.12]
-   (https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)  
+   [releases/tag/v0.12](https://github.com/CzarekTomczak/cef2go/releases/tag/v0.12)  
    Copy the cef2go.app directory to cef2go/Release.
 
 6. Run "make" command.
@@ -189,14 +174,12 @@ Getting started on Mac OS X
 Built a cool app?
 -----------------
 Built a cool app using CEF2go and would like to share info with
-the community? Talk about it on the [CEF2go Forum]
-(http://groups.google.com/group/cef2go).
+the community? Talk about it on the [CEF2go Forum](http://groups.google.com/group/cef2go).
 
 
 Familiar with Python or PHP?
 ----------------------------
 The author of CEF2go is also working on CEF bindings
-for other languages. For Python see the [CEF Python]
-(https://code.google.com/p/cefpython/) project. For PHP see the 
+for other languages. For Python see the [CEF Python](https://code.google.com/p/cefpython/) project. For PHP see the 
 [PHP Desktop](https://code.google.com/p/phpdesktop/) project.
 

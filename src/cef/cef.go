@@ -4,21 +4,6 @@
 
 package cef
 
-/*
-CEF capi fixes
---------------
-1. In cef_string.h:
-    this => typedef cef_string_utf16_t cef_string_t;
-    to => #define cef_string_t cef_string_utf16_t
-2. In cef_export.h:
-    #elif defined(COMPILER_GCC)
-    #define CEF_EXPORT __attribute__ ((visibility("default")))
-    #ifdef OS_WIN
-    #define CEF_CALLBACK __stdcall
-    #else
-    #define CEF_CALLBACK
-    #endif
-*/
 
 /*
 #cgo CFLAGS: -I./../../
@@ -27,6 +12,8 @@ CEF capi fixes
 #include "include/capi/cef_app_capi.h"
 #include "handlers/cef_app.h"
 #include "handlers/cef_client.h"
+
+cef_life_span_handler_t g_life_span_handler = {};
 */
 import "C"
 import "unsafe"
@@ -69,7 +56,6 @@ const (
     LOGSEVERITY_INFO = C.LOGSEVERITY_INFO
     LOGSEVERITY_WARNING = C.LOGSEVERITY_WARNING
     LOGSEVERITY_ERROR = C.LOGSEVERITY_ERROR
-    LOGSEVERITY_ERROR_REPORT = C.LOGSEVERITY_ERROR_REPORT
     LOGSEVERITY_DISABLE = C.LOGSEVERITY_DISABLE
 )
 
@@ -83,11 +69,11 @@ func _InitializeGlobalCStructures() {
 
     _AppHandler = (*C.cef_app_t)(
             C.calloc(1, C.sizeof_cef_app_t))
-    C.initialize_app_handler(_AppHandler)
+    C.initialize_cef_app(_AppHandler)
 
     _ClientHandler = (*C.struct__cef_client_t)(
             C.calloc(1, C.sizeof_struct__cef_client_t))
-    C.initialize_client_handler(_ClientHandler)
+    C.initialize_cef_client(_ClientHandler)
 }
 
 func ExecuteProcess(appHandle unsafe.Pointer) int {

@@ -5,10 +5,14 @@
 #pragma once
 
 #include "handlers/cef_base.h"
+#include "handlers/cef_life_span_handler.h"
 #include "include/capi/cef_client_capi.h"
 
+extern cef_life_span_handler_t g_life_span_handler;
+
+
 // ----------------------------------------------------------------------------
-// struct _cef_client_t
+// struct cef_client_t
 // ----------------------------------------------------------------------------
 
 ///
@@ -16,8 +20,8 @@
 ///
 
 ///
-// Return the handler for context menus. If no handler is provided the default
-// implementation will be used.
+// Return the handler for context menus. If no handler is
+// provided the default implementation will be used.
 ///
 
 struct _cef_context_menu_handler_t* CEF_CALLBACK get_context_menu_handler(
@@ -108,7 +112,8 @@ struct _cef_keyboard_handler_t* CEF_CALLBACK get_keyboard_handler(
 struct _cef_life_span_handler_t* CEF_CALLBACK get_life_span_handler(
         struct _cef_client_t* self) {
     DEBUG_CALLBACK("get_life_span_handler\n");
-    return NULL;
+    // Implemented!
+    return &g_life_span_handler;
 }
 
 ///
@@ -151,10 +156,10 @@ int CEF_CALLBACK on_process_message_received(
     return 0;
 }
 
-void initialize_client_handler(struct _cef_client_t* client) {
-    DEBUG_CALLBACK("initialize_client_handler\n");
+void initialize_cef_client(cef_client_t* client) {
+    DEBUG_CALLBACK("initialize_cef_client\n");
     client->base.size = sizeof(cef_client_t);
-    initialize_cef_base((cef_base_t*)client);
+    initialize_cef_base_ref_counted((cef_base_ref_counted_t*)client);
     // callbacks
     client->get_context_menu_handler = get_context_menu_handler;
     client->get_dialog_handler = get_dialog_handler;
@@ -165,7 +170,7 @@ void initialize_client_handler(struct _cef_client_t* client) {
     client->get_geolocation_handler = get_geolocation_handler;
     client->get_jsdialog_handler = get_jsdialog_handler;
     client->get_keyboard_handler = get_keyboard_handler;
-    client->get_life_span_handler = get_life_span_handler;
+    client->get_life_span_handler = get_life_span_handler;  // Implemented!
     client->get_load_handler = get_load_handler;
     client->get_render_handler = get_render_handler;
     client->get_request_handler = get_request_handler;

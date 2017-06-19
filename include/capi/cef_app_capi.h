@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2017 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,14 +33,12 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
+// $hash=52ce63b881a6e3d2d13a39b81ad2626f366fc130$
+//
 
 #ifndef CEF_INCLUDE_CAPI_CEF_APP_CAPI_H_
 #define CEF_INCLUDE_CAPI_CEF_APP_CAPI_H_
 #pragma once
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include "include/capi/cef_base_capi.h"
 #include "include/capi/cef_browser_process_handler_capi.h"
@@ -48,6 +46,10 @@ extern "C" {
 #include "include/capi/cef_render_process_handler_capi.h"
 #include "include/capi/cef_resource_bundle_handler_capi.h"
 #include "include/capi/cef_scheme_capi.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct _cef_app_t;
 
@@ -59,7 +61,7 @@ typedef struct _cef_app_t {
   ///
   // Base structure.
   ///
-  cef_base_t base;
+  cef_base_ref_counted_t base;
 
   ///
   // Provides an opportunity to view and/or modify command-line arguments before
@@ -72,8 +74,9 @@ typedef struct _cef_app_t {
   // modify command-line arguments for non-browser processes as this may result
   // in undefined behavior including crashes.
   ///
-  void (CEF_CALLBACK *on_before_command_line_processing)(
-      struct _cef_app_t* self, const cef_string_t* process_type,
+  void(CEF_CALLBACK* on_before_command_line_processing)(
+      struct _cef_app_t* self,
+      const cef_string_t* process_type,
       struct _cef_command_line_t* command_line);
 
   ///
@@ -82,7 +85,8 @@ typedef struct _cef_app_t {
   // each process and the registered schemes should be the same across all
   // processes.
   ///
-  void (CEF_CALLBACK *on_register_custom_schemes)(struct _cef_app_t* self,
+  void(CEF_CALLBACK* on_register_custom_schemes)(
+      struct _cef_app_t* self,
       struct _cef_scheme_registrar_t* registrar);
 
   ///
@@ -91,24 +95,23 @@ typedef struct _cef_app_t {
   // If no handler is returned resources will be loaded from pack files. This
   // function is called by the browser and render processes on multiple threads.
   ///
-  struct _cef_resource_bundle_handler_t* (
-      CEF_CALLBACK *get_resource_bundle_handler)(struct _cef_app_t* self);
+  struct _cef_resource_bundle_handler_t*(
+      CEF_CALLBACK* get_resource_bundle_handler)(struct _cef_app_t* self);
 
   ///
   // Return the handler for functionality specific to the browser process. This
   // function is called on multiple threads in the browser process.
   ///
-  struct _cef_browser_process_handler_t* (
-      CEF_CALLBACK *get_browser_process_handler)(struct _cef_app_t* self);
+  struct _cef_browser_process_handler_t*(
+      CEF_CALLBACK* get_browser_process_handler)(struct _cef_app_t* self);
 
   ///
   // Return the handler for functionality specific to the render process. This
   // function is called on the render process main thread.
   ///
-  struct _cef_render_process_handler_t* (
-      CEF_CALLBACK *get_render_process_handler)(struct _cef_app_t* self);
+  struct _cef_render_process_handler_t*(
+      CEF_CALLBACK* get_render_process_handler)(struct _cef_app_t* self);
 } cef_app_t;
-
 
 ///
 // This function should be called from the application entry point function to
@@ -123,7 +126,8 @@ typedef struct _cef_app_t {
 // cef_sandbox_win.h for details).
 ///
 CEF_EXPORT int cef_execute_process(const struct _cef_main_args_t* args,
-    cef_app_t* application, void* windows_sandbox_info);
+                                   cef_app_t* application,
+                                   void* windows_sandbox_info);
 
 ///
 // This function should be called on the main application thread to initialize
@@ -133,8 +137,9 @@ CEF_EXPORT int cef_execute_process(const struct _cef_main_args_t* args,
 // be NULL (see cef_sandbox_win.h for details).
 ///
 CEF_EXPORT int cef_initialize(const struct _cef_main_args_t* args,
-    const struct _cef_settings_t* settings, cef_app_t* application,
-    void* windows_sandbox_info);
+                              const struct _cef_settings_t* settings,
+                              cef_app_t* application,
+                              void* windows_sandbox_info);
 
 ///
 // This function should be called on the main application thread to shut down
@@ -144,11 +149,18 @@ CEF_EXPORT void cef_shutdown();
 
 ///
 // Perform a single iteration of CEF message loop processing. This function is
-// used to integrate the CEF message loop into an existing application message
-// loop. Care must be taken to balance performance against excessive CPU usage.
-// This function should only be called on the main application thread and only
-// if cef_initialize() is called with a CefSettings.multi_threaded_message_loop
-// value of false (0). This function will not block.
+// provided for cases where the CEF message loop must be integrated into an
+// existing application message loop. Use of this function is not recommended
+// for most users; use either the cef_run_message_loop() function or
+// CefSettings.multi_threaded_message_loop if possible. When using this function
+// care must be taken to balance performance against excessive CPU usage. It is
+// recommended to enable the CefSettings.external_message_pump option when using
+// this function so that
+// cef_browser_process_handler_t::on_schedule_message_pump_work() callbacks can
+// facilitate the scheduling process. This function should only be called on the
+// main application thread and only if cef_initialize() is called with a
+// CefSettings.multi_threaded_message_loop value of false (0). This function
+// will not block.
 ///
 CEF_EXPORT void cef_do_message_loop_work();
 
@@ -174,6 +186,13 @@ CEF_EXPORT void cef_quit_message_loop();
 // modal message loop. Set to false (0) after exiting the modal message loop.
 ///
 CEF_EXPORT void cef_set_osmodal_loop(int osModalLoop);
+
+///
+// Call during process startup to enable High-DPI support on Windows 7 or newer.
+// Older versions of Windows should be left DPI-unaware because they do not
+// support DirectWrite and GDI fonts are kerned very badly.
+///
+CEF_EXPORT void cef_enable_highdpi_support();
 
 #ifdef __cplusplus
 }

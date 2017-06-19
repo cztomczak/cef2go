@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2017 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,18 +33,19 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
+// $hash=07c2a01bb9975fa52fdb287712f8f369557ba755$
+//
 
 #ifndef CEF_INCLUDE_CAPI_CEF_KEYBOARD_HANDLER_CAPI_H_
 #define CEF_INCLUDE_CAPI_CEF_KEYBOARD_HANDLER_CAPI_H_
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "include/capi/cef_base_capi.h"
 #include "include/capi/cef_browser_capi.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 ///
 // Implement this structure to handle events related to keyboard input. The
@@ -54,16 +55,20 @@ typedef struct _cef_keyboard_handler_t {
   ///
   // Base structure.
   ///
-  cef_base_t base;
+  cef_base_ref_counted_t base;
 
+  ///
   // Called before a keyboard event is sent to the renderer. |event| contains
   // information about the keyboard event. |os_event| is the operating system
   // event message, if any. Return true (1) if the event was handled or false
   // (0) otherwise. If the event will be handled in on_key_event() as a keyboard
   // shortcut set |is_keyboard_shortcut| to true (1) and return false (0).
-  int (CEF_CALLBACK *on_pre_key_event)(struct _cef_keyboard_handler_t* self,
-      struct _cef_browser_t* browser, const struct _cef_key_event_t* event,
-      cef_event_handle_t os_event, int* is_keyboard_shortcut);
+  ///
+  int(CEF_CALLBACK* on_pre_key_event)(struct _cef_keyboard_handler_t* self,
+                                      struct _cef_browser_t* browser,
+                                      const struct _cef_key_event_t* event,
+                                      cef_event_handle_t os_event,
+                                      int* is_keyboard_shortcut);
 
   ///
   // Called after the renderer and JavaScript in the page has had a chance to
@@ -71,11 +76,11 @@ typedef struct _cef_keyboard_handler_t {
   // |os_event| is the operating system event message, if any. Return true (1)
   // if the keyboard event was handled or false (0) otherwise.
   ///
-  int (CEF_CALLBACK *on_key_event)(struct _cef_keyboard_handler_t* self,
-      struct _cef_browser_t* browser, const struct _cef_key_event_t* event,
-      cef_event_handle_t os_event);
+  int(CEF_CALLBACK* on_key_event)(struct _cef_keyboard_handler_t* self,
+                                  struct _cef_browser_t* browser,
+                                  const struct _cef_key_event_t* event,
+                                  cef_event_handle_t os_event);
 } cef_keyboard_handler_t;
-
 
 #ifdef __cplusplus
 }

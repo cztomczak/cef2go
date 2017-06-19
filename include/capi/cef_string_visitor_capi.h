@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2017 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,17 +33,18 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
+// $hash=2e8edddfd49aea615c7adf8d0d092a4865b79229$
+//
 
 #ifndef CEF_INCLUDE_CAPI_CEF_STRING_VISITOR_CAPI_H_
 #define CEF_INCLUDE_CAPI_CEF_STRING_VISITOR_CAPI_H_
 #pragma once
 
+#include "include/capi/cef_base_capi.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "include/capi/cef_base_capi.h"
-
 
 ///
 // Implement this structure to receive string values asynchronously.
@@ -52,15 +53,14 @@ typedef struct _cef_string_visitor_t {
   ///
   // Base structure.
   ///
-  cef_base_t base;
+  cef_base_ref_counted_t base;
 
   ///
   // Method that will be executed.
   ///
-  void (CEF_CALLBACK *visit)(struct _cef_string_visitor_t* self,
-      const cef_string_t* string);
+  void(CEF_CALLBACK* visit)(struct _cef_string_visitor_t* self,
+                            const cef_string_t* string);
 } cef_string_visitor_t;
-
 
 #ifdef __cplusplus
 }

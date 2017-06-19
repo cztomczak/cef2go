@@ -27,26 +27,38 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 #ifndef CEF_INCLUDE_INTERNAL_CEF_TYPES_LINUX_H_
 #define CEF_INCLUDE_INTERNAL_CEF_TYPES_LINUX_H_
 #pragma once
 
-#include "include/internal/cef_build.h"
+#include "include/base/cef_build.h"
 
 #if defined(OS_LINUX)
-#include <gtk/gtk.h>
+
+typedef union _XEvent XEvent;
+typedef struct _XDisplay XDisplay;
+
+#include "include/internal/cef_export.h"
 #include "include/internal/cef_string.h"
+
+// Handle types.
+#define cef_cursor_handle_t unsigned long
+#define cef_event_handle_t XEvent*
+#define cef_window_handle_t unsigned long
+
+#define kNullCursorHandle 0
+#define kNullEventHandle NULL
+#define kNullWindowHandle 0
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// Handle types.
-#define cef_cursor_handle_t GdkCursor*
-#define cef_event_handle_t GdkEvent*
-#define cef_window_handle_t GtkWidget*
-#define cef_text_input_context_t void*
+///
+// Return the singleton X11 display shared with Chromium. The display is not
+// thread-safe and must only be accessed on the browser process UI thread.
+///
+CEF_EXPORT XDisplay* cef_get_xdisplay();
 
 ///
 // Structure representing CefExecuteProcess arguments.
@@ -60,19 +72,34 @@ typedef struct _cef_main_args_t {
 // Class representing window information.
 ///
 typedef struct _cef_window_info_t {
-  // Pointer for the parent GtkBox widget.
-  cef_window_handle_t parent_widget;
+  unsigned int x;
+  unsigned int y;
+  unsigned int width;
+  unsigned int height;
 
-  // If window rendering is disabled no browser window will be created. Set
-  // |parent_widget| to the window that will act as the parent for popup menus,
-  // dialog boxes, etc.
-  int window_rendering_disabled;
+  ///
+  // Pointer for the parent window.
+  ///
+  cef_window_handle_t parent_window;
 
-  // Set to true to enable transparent painting.
-  int transparent_painting;
+  ///
+  // Set to true (1) to create the browser using windowless (off-screen)
+  // rendering. No window will be created for the browser and all rendering will
+  // occur via the CefRenderHandler interface. The |parent_window| value will be
+  // used to identify monitor info and to act as the parent window for dialogs,
+  // context menus, etc. If |parent_window| is not provided then the main screen
+  // monitor will be used and some functionality that requires a parent window
+  // may not function correctly. In order to create windowless browsers the
+  // CefSettings.windowless_rendering_enabled value must be set to true.
+  // Transparent painting is enabled by default but can be disabled by setting
+  // CefBrowserSettings.background_color to an opaque value.
+  ///
+  int windowless_rendering_enabled;
 
-  // Pointer for the new browser widget.
-  cef_window_handle_t widget;
+  ///
+  // Pointer for the new browser window. Only used with windowed rendering.
+  ///
+  cef_window_handle_t window;
 } cef_window_info_t;
 
 #ifdef __cplusplus

@@ -52,32 +52,34 @@ CEF_EXPORT cef_string_multimap_t cef_string_multimap_alloc();
 ///
 // Return the number of elements in the string multimap.
 ///
-CEF_EXPORT int cef_string_multimap_size(cef_string_multimap_t map);
+CEF_EXPORT size_t cef_string_multimap_size(cef_string_multimap_t map);
 
 ///
 // Return the number of values with the specified key.
 ///
-CEF_EXPORT int cef_string_multimap_find_count(cef_string_multimap_t map,
-                                              const cef_string_t* key);
+CEF_EXPORT size_t cef_string_multimap_find_count(cef_string_multimap_t map,
+                                                 const cef_string_t* key);
 
 ///
 // Return the value_index-th value with the specified key.
 ///
 CEF_EXPORT int cef_string_multimap_enumerate(cef_string_multimap_t map,
                                              const cef_string_t* key,
-                                             int value_index,
+                                             size_t value_index,
                                              cef_string_t* value);
 
 ///
 // Return the key at the specified zero-based string multimap index.
 ///
-CEF_EXPORT int cef_string_multimap_key(cef_string_multimap_t map, int index,
+CEF_EXPORT int cef_string_multimap_key(cef_string_multimap_t map,
+                                       size_t index,
                                        cef_string_t* key);
 
 ///
 // Return the value at the specified zero-based string multimap index.
 ///
-CEF_EXPORT int cef_string_multimap_value(cef_string_multimap_t map, int index,
+CEF_EXPORT int cef_string_multimap_value(cef_string_multimap_t map,
+                                         size_t index,
                                          cef_string_t* value);
 
 ///
@@ -96,7 +98,6 @@ CEF_EXPORT void cef_string_multimap_clear(cef_string_multimap_t map);
 // Free the string multimap.
 ///
 CEF_EXPORT void cef_string_multimap_free(cef_string_multimap_t map);
-
 
 #ifdef __cplusplus
 }

@@ -19,7 +19,7 @@ Table of contents:
 Introduction
 ------------
 
-CEF2go is an open source project founded by [Czarek Tomczak](http://www.linkedin.com/in/czarektomczak) in 2014
+CEF2go is an open source project founded by Czarek Tomczak (hire me! download my [resume](https://drive.google.com/file/d/17xmoT5Z_zTHkVclqPzrs2aAV64Uiu7fh/view)) in 2014
 to provide Go bindings for the [Chromium Embedded Framework](https://code.google.com/p/chromiumembedded/) (CEF).
 CEF2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can provide browser

@@ -78,8 +78,7 @@ Both code contributions and Paypal donations are welcome.
 Thanks to those who have made a Paypal donation:
 - David Witten
 
-Thanks to those that have donated their time through code contributions:
-- No one yet, you can be the first one! 
+For sponsorship opportunities please contact Czarek directly - contact details are available in his [Resume](https://drive.google.com/file/d/17xmoT5Z_zTHkVclqPzrs2aAV64Uiu7fh/view).
 
 
 Forks worth a look

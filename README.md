@@ -19,8 +19,8 @@ Table of contents:
 Introduction
 ------------
 
-CEF2go is an open source project founded by [Czarek Tomczak](https://drive.google.com/file/d/17xmoT5Z_zTHkVclqPzrs2aAV64Uiu7fh/view)
-in 2014 to provide Go bindings for the [Chromium Embedded Framework](https://code.google.com/p/chromiumembedded/) (CEF).
+CEF2go is an open source project founded by [Czarek Tomczak](https://www.linkedin.com/in/czarektomczak/)
+in 2014 to provide Go bindings for the [Chromium Embedded Framework](https://bitbucket.org/chromiumembedded/cef) (CEF).
 CEF2go can act as a GUI toolkit, allowing you to create an HTML 5
 based GUI in your application. Or you can provide browser
 capabilities to your application.
@@ -77,8 +77,6 @@ Both code contributions and Paypal donations are welcome.
 
 Thanks to those who have made a Paypal donation:
 - David Witten
-
-For sponsorship opportunities please contact Czarek directly - contact details are available in his [Resume](https://drive.google.com/file/d/17xmoT5Z_zTHkVclqPzrs2aAV64Uiu7fh/view).
 
 
 Forks worth a look

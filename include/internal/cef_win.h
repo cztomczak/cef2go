@@ -27,43 +27,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 #ifndef CEF_INCLUDE_INTERNAL_CEF_WIN_H_
 #define CEF_INCLUDE_INTERNAL_CEF_WIN_H_
 #pragma once
 
-#if defined(OS_WIN)
-#include <windows.h>
 #include "include/internal/cef_types_win.h"
 #include "include/internal/cef_types_wrappers.h"
-
-///
-// Atomic increment and decrement.
-///
-#define CefAtomicIncrement(p) InterlockedIncrement(p)
-#define CefAtomicDecrement(p) InterlockedDecrement(p)
-
-///
-// Critical section wrapper.
-///
-class CefCriticalSection {
- public:
-  CefCriticalSection() {
-    memset(&m_sec, 0, sizeof(CRITICAL_SECTION));
-    InitializeCriticalSection(&m_sec);
-  }
-  virtual ~CefCriticalSection() {
-    DeleteCriticalSection(&m_sec);
-  }
-  void Lock() {
-    EnterCriticalSection(&m_sec);
-  }
-  void Unlock() {
-    LeaveCriticalSection(&m_sec);
-  }
-
-  CRITICAL_SECTION m_sec;
-};
 
 ///
 // Handle types.
@@ -71,7 +40,6 @@ class CefCriticalSection {
 #define CefCursorHandle cef_cursor_handle_t
 #define CefEventHandle cef_event_handle_t
 #define CefWindowHandle cef_window_handle_t
-#define CefTextInputContext cef_text_input_context_t
 
 struct CefMainArgsTraits {
   typedef cef_main_args_t struct_type;
@@ -79,8 +47,9 @@ struct CefMainArgsTraits {
   static inline void init(struct_type* s) {}
   static inline void clear(struct_type* s) {}
 
-  static inline void set(const struct_type* src, struct_type* target,
-      bool copy) {
+  static inline void set(const struct_type* src,
+                         struct_type* target,
+                         bool copy) {
     target->instance = src->instance;
   }
 };
@@ -93,9 +62,7 @@ class CefMainArgs : public CefStructBase<CefMainArgsTraits> {
   CefMainArgs() : parent() {}
   explicit CefMainArgs(const cef_main_args_t& r) : parent(r) {}
   explicit CefMainArgs(const CefMainArgs& r) : parent(r) {}
-  explicit CefMainArgs(HINSTANCE hInstance) : parent() {
-    instance = hInstance;
-  }
+  explicit CefMainArgs(HINSTANCE hInstance) : parent() { instance = hInstance; }
 };
 
 struct CefWindowInfoTraits {
@@ -107,11 +74,12 @@ struct CefWindowInfoTraits {
     cef_string_clear(&s->window_name);
   }
 
-  static inline void set(const struct_type* src, struct_type* target,
-      bool copy) {
+  static inline void set(const struct_type* src,
+                         struct_type* target,
+                         bool copy) {
     target->ex_style = src->ex_style;
     cef_string_set(src->window_name.str, src->window_name.length,
-        &target->window_name, copy);
+                   &target->window_name, copy);
     target->style = src->style;
     target->x = src->x;
     target->y = src->y;
@@ -119,9 +87,8 @@ struct CefWindowInfoTraits {
     target->height = src->height;
     target->parent_window = src->parent_window;
     target->menu = src->menu;
+    target->windowless_rendering_enabled = src->windowless_rendering_enabled;
     target->window = src->window;
-    target->transparent_painting = src->transparent_painting;
-    target->window_rendering_disabled = src->window_rendering_disabled;
   }
 };
 
@@ -136,20 +103,26 @@ class CefWindowInfo : public CefStructBase<CefWindowInfoTraits> {
   explicit CefWindowInfo(const cef_window_info_t& r) : parent(r) {}
   explicit CefWindowInfo(const CefWindowInfo& r) : parent(r) {}
 
-  void SetAsChild(HWND hWndParent, RECT windowRect) {
-    style = WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_TABSTOP |
-            WS_VISIBLE;
-    parent_window = hWndParent;
+  ///
+  // Create the browser as a child window.
+  ///
+  void SetAsChild(CefWindowHandle parent, RECT windowRect) {
+    style =
+        WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_TABSTOP | WS_VISIBLE;
+    parent_window = parent;
     x = windowRect.left;
     y = windowRect.top;
     width = windowRect.right - windowRect.left;
     height = windowRect.bottom - windowRect.top;
   }
 
-  void SetAsPopup(HWND hWndParent, const CefString& windowName) {
-    style = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS |
-            WS_VISIBLE;
-    parent_window = hWndParent;
+  ///
+  // Create the browser as a popup window.
+  ///
+  void SetAsPopup(CefWindowHandle parent, const CefString& windowName) {
+    style =
+        WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE;
+    parent_window = parent;
     x = CW_USEDEFAULT;
     y = CW_USEDEFAULT;
     width = CW_USEDEFAULT;
@@ -158,16 +131,22 @@ class CefWindowInfo : public CefStructBase<CefWindowInfoTraits> {
     cef_string_copy(windowName.c_str(), windowName.length(), &window_name);
   }
 
-  void SetTransparentPainting(BOOL transparentPainting) {
-    transparent_painting = transparentPainting;
-  }
-
-  void SetAsOffScreen(HWND hWndParent) {
-    window_rendering_disabled = TRUE;
-    parent_window = hWndParent;
+  ///
+  // Create the browser using windowless (off-screen) rendering. No window
+  // will be created for the browser and all rendering will occur via the
+  // CefRenderHandler interface. The |parent| value will be used to identify
+  // monitor info and to act as the parent window for dialogs, context menus,
+  // etc. If |parent| is not provided then the main screen monitor will be used
+  // and some functionality that requires a parent window may not function
+  // correctly. In order to create windowless browsers the
+  // CefSettings.windowless_rendering_enabled value must be set to true.
+  // Transparent painting is enabled by default but can be disabled by setting
+  // CefBrowserSettings.background_color to an opaque value.
+  ///
+  void SetAsWindowless(CefWindowHandle parent) {
+    windowless_rendering_enabled = TRUE;
+    parent_window = parent;
   }
 };
-
-#endif  // OS_WIN
 
 #endif  // CEF_INCLUDE_INTERNAL_CEF_WIN_H_

@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2017 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,19 +33,20 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
+// $hash=f0f3fd4cab00c0eb11956e674a111cb30d3af100$
+//
 
 #ifndef CEF_INCLUDE_CAPI_CEF_DISPLAY_HANDLER_CAPI_H_
 #define CEF_INCLUDE_CAPI_CEF_DISPLAY_HANDLER_CAPI_H_
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "include/capi/cef_base_capi.h"
 #include "include/capi/cef_browser_capi.h"
 #include "include/capi/cef_frame_capi.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 ///
 // Implement this structure to handle events related to browser display state.
@@ -55,20 +56,41 @@ typedef struct _cef_display_handler_t {
   ///
   // Base structure.
   ///
-  cef_base_t base;
+  cef_base_ref_counted_t base;
 
   ///
   // Called when a frame's address has changed.
   ///
-  void (CEF_CALLBACK *on_address_change)(struct _cef_display_handler_t* self,
-      struct _cef_browser_t* browser, struct _cef_frame_t* frame,
-      const cef_string_t* url);
+  void(CEF_CALLBACK* on_address_change)(struct _cef_display_handler_t* self,
+                                        struct _cef_browser_t* browser,
+                                        struct _cef_frame_t* frame,
+                                        const cef_string_t* url);
 
   ///
   // Called when the page title changes.
   ///
-  void (CEF_CALLBACK *on_title_change)(struct _cef_display_handler_t* self,
-      struct _cef_browser_t* browser, const cef_string_t* title);
+  void(CEF_CALLBACK* on_title_change)(struct _cef_display_handler_t* self,
+                                      struct _cef_browser_t* browser,
+                                      const cef_string_t* title);
+
+  ///
+  // Called when the page icon changes.
+  ///
+  void(CEF_CALLBACK* on_favicon_urlchange)(struct _cef_display_handler_t* self,
+                                           struct _cef_browser_t* browser,
+                                           cef_string_list_t icon_urls);
+
+  ///
+  // Called when web content in the page has toggled fullscreen mode. If
+  // |fullscreen| is true (1) the content will automatically be sized to fill
+  // the browser content area. If |fullscreen| is false (0) the content will
+  // automatically return to its original size and position. The client is
+  // responsible for resizing the browser if desired.
+  ///
+  void(CEF_CALLBACK* on_fullscreen_mode_change)(
+      struct _cef_display_handler_t* self,
+      struct _cef_browser_t* browser,
+      int fullscreen);
 
   ///
   // Called when the browser is about to display a tooltip. |text| contains the
@@ -78,26 +100,28 @@ typedef struct _cef_display_handler_t {
   // tooltip. When window rendering is disabled the application is responsible
   // for drawing tooltips and the return value is ignored.
   ///
-  int (CEF_CALLBACK *on_tooltip)(struct _cef_display_handler_t* self,
-      struct _cef_browser_t* browser, cef_string_t* text);
+  int(CEF_CALLBACK* on_tooltip)(struct _cef_display_handler_t* self,
+                                struct _cef_browser_t* browser,
+                                cef_string_t* text);
 
   ///
-  // Called when the browser receives a status message. |text| contains the text
-  // that will be displayed in the status message and |type| indicates the
-  // status message type.
+  // Called when the browser receives a status message. |value| contains the
+  // text that will be displayed in the status message.
   ///
-  void (CEF_CALLBACK *on_status_message)(struct _cef_display_handler_t* self,
-      struct _cef_browser_t* browser, const cef_string_t* value);
+  void(CEF_CALLBACK* on_status_message)(struct _cef_display_handler_t* self,
+                                        struct _cef_browser_t* browser,
+                                        const cef_string_t* value);
 
   ///
   // Called to display a console message. Return true (1) to stop the message
   // from being output to the console.
   ///
-  int (CEF_CALLBACK *on_console_message)(struct _cef_display_handler_t* self,
-      struct _cef_browser_t* browser, const cef_string_t* message,
-      const cef_string_t* source, int line);
+  int(CEF_CALLBACK* on_console_message)(struct _cef_display_handler_t* self,
+                                        struct _cef_browser_t* browser,
+                                        const cef_string_t* message,
+                                        const cef_string_t* source,
+                                        int line);
 } cef_display_handler_t;
-
 
 #ifdef __cplusplus
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2014 Marshall A. Greenblatt. All rights reserved.
+// Copyright (c) 2017 Marshall A. Greenblatt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -33,17 +33,18 @@
 // by hand. See the translator.README.txt file in the tools directory for
 // more information.
 //
+// $hash=fbb817705137a12b4718950ff696396c30057007$
+//
 
 #ifndef CEF_INCLUDE_CAPI_CEF_PATH_UTIL_CAPI_H_
 #define CEF_INCLUDE_CAPI_CEF_PATH_UTIL_CAPI_H_
 #pragma once
 
+#include "include/capi/cef_base_capi.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "include/capi/cef_base_capi.h"
-
 
 ///
 // Retrieve the path associated with the specified |key|. Returns true (1) on

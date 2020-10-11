@@ -43,6 +43,7 @@ Compatibility
 Supported platforms: Windows, Linux, Mac OSX.
 
 CEF2go was tested and works fine with Go 1.2 / Go 1.3.3.
+In the case of Windows (32 and 64 bits) it was tested and works fine with Go 1.8.3.
 
 
 Binary examples
@@ -106,24 +107,44 @@ accessible from the outside, it can be accessed only from the
 machine it is running on.
 
 
-Getting started on Windows
+Getting started on Windows 32-bit
 --------------------------
-1. Install Go 32-bit. CEF 64-bit binaries are still experimental and
-   were not tested.
+1. Install Go 32-bit.
 
 2. Install mingw 32-bit and add C:\MinGW\bin to PATH. You can install mingw
    using [mingw-get-setup.exe](http://sourceforge.net/projects/mingw/files/Installer/).
    Select packages to install: "mingw-developer-toolkit",
    "mingw32-base", "msys-base". CEF2go was tested and works fine
-   with GCC 4.8.2. You can check gcc version with "gcc --version".
+   with GCC 5.3.0. You can check gcc version with "gcc --version".
 
-3. Download CEF 3 branch 1750 revision 1590 binaries:
+3. Download CEF 3 branch 3071 revision 1640 binaries:
    [cef_binary_3.1750.1590_windows32.7z](https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)  
    Copy Release/* to cef2go/Release  
    Copy Resources/* to cef2go/Release  
 
 4. Run build.bat (or "build.bat noconsole" to get rid of the console
     window when running the final executable)
+	
+5. You might need to help your linker find libcef.dll
+
+Getting started on Windows 64-bit
+--------------------------
+1. Install Go 64-bit.
+
+2. Install mingw 64-bit and add the bin folder to PATH. You can install mingw
+   using [mingw-w64-install](https://sourceforge.net/projects/mingw-w64/files/latest/download).
+   Select x86_64 as your architecture.
+   CEF2go was tested and works fine with GCC 7.1.0. You can check gcc version with "gcc --version".
+
+3. Download CEF 3 branch 3071 revision 1640 binaries:
+   [cef_binary_3.1750.1590_windows32.7z](https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)  
+   Copy Release/* to cef2go/Release  
+   Copy Resources/* to cef2go/Release  
+
+4. Run build.bat (or "build.bat noconsole" to get rid of the console
+    window when running the final executable)
+	
+5. You might need to help your linker find libcef.dll 
 
 
 Getting started on Linux

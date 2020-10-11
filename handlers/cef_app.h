@@ -61,7 +61,7 @@ struct _cef_resource_bundle_handler_t*
 // Return the handler for functionality specific to the browser process. This
 // function is called on multiple threads in the browser process.
 ///
-struct _cef_browser_process_handler_t* 
+struct _cef_browser_process_handler_t*
         CEF_CALLBACK get_browser_process_handler(struct _cef_app_t* self) {
     DEBUG_CALLBACK("get_browser_process_handler\n");
     return NULL;
@@ -77,10 +77,10 @@ struct _cef_render_process_handler_t*
     return NULL;
 }
 
-void initialize_app_handler(cef_app_t* app) {
-    printf("initialize_app_handler\n");
+void initialize_cef_app(cef_app_t* app) {
+    printf("initialize_cef_app\n");
     app->base.size = sizeof(cef_app_t);
-    initialize_cef_base((cef_base_t*)app);
+    initialize_cef_base_ref_counted((cef_base_ref_counted_t*)app);
     // callbacks
     app->on_before_command_line_processing = on_before_command_line_processing;
     app->on_register_custom_schemes = on_register_custom_schemes;

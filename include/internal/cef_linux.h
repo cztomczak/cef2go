@@ -27,52 +27,17 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 #ifndef CEF_INCLUDE_INTERNAL_CEF_LINUX_H_
 #define CEF_INCLUDE_INTERNAL_CEF_LINUX_H_
 #pragma once
 
-#if defined(OS_LINUX)
-#include <pthread.h>
 #include "include/internal/cef_types_linux.h"
 #include "include/internal/cef_types_wrappers.h"
-
-// Atomic increment and decrement.
-inline long CefAtomicIncrement(long volatile *pDest) {  // NOLINT(runtime/int)
-  return __sync_add_and_fetch(pDest, 1);
-}
-inline long CefAtomicDecrement(long volatile *pDest) {  // NOLINT(runtime/int)
-  return __sync_sub_and_fetch(pDest, 1);
-}
-
-// Critical section wrapper.
-class CefCriticalSection {
- public:
-  CefCriticalSection() {
-    pthread_mutexattr_init(&attr_);
-    pthread_mutexattr_settype(&attr_, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&lock_, &attr_);
-  }
-  virtual ~CefCriticalSection() {
-    pthread_mutex_destroy(&lock_);
-    pthread_mutexattr_destroy(&attr_);
-  }
-  void Lock() {
-    pthread_mutex_lock(&lock_);
-  }
-  void Unlock() {
-    pthread_mutex_unlock(&lock_);
-  }
-
-  pthread_mutex_t lock_;
-  pthread_mutexattr_t attr_;
-};
 
 // Handle types.
 #define CefCursorHandle cef_cursor_handle_t
 #define CefEventHandle cef_event_handle_t
 #define CefWindowHandle cef_window_handle_t
-#define CefTextInputContext cef_text_input_context_t
 
 struct CefMainArgsTraits {
   typedef cef_main_args_t struct_type;
@@ -80,8 +45,9 @@ struct CefMainArgsTraits {
   static inline void init(struct_type* s) {}
   static inline void clear(struct_type* s) {}
 
-  static inline void set(const struct_type* src, struct_type* target,
-      bool copy) {
+  static inline void set(const struct_type* src,
+                         struct_type* target,
+                         bool copy) {
     target->argc = src->argc;
     target->argv = src->argv;
   }
@@ -107,12 +73,16 @@ struct CefWindowInfoTraits {
   static inline void init(struct_type* s) {}
   static inline void clear(struct_type* s) {}
 
-  static inline void set(const struct_type* src, struct_type* target,
-      bool copy) {
-    target->parent_widget = src->parent_widget;
-    target->window_rendering_disabled = src->window_rendering_disabled;
-    target->transparent_painting = src->transparent_painting;
-    target->widget = src->widget;
+  static inline void set(const struct_type* src,
+                         struct_type* target,
+                         bool copy) {
+    target->x = src->x;
+    target->y = src->y;
+    target->width = src->width;
+    target->height = src->height;
+    target->parent_window = src->parent_window;
+    target->windowless_rendering_enabled = src->windowless_rendering_enabled;
+    target->window = src->window;
   }
 };
 
@@ -125,20 +95,33 @@ class CefWindowInfo : public CefStructBase<CefWindowInfoTraits> {
   explicit CefWindowInfo(const cef_window_info_t& r) : parent(r) {}
   explicit CefWindowInfo(const CefWindowInfo& r) : parent(r) {}
 
-  void SetAsChild(CefWindowHandle ParentWidget) {
-    parent_widget = ParentWidget;
+  ///
+  // Create the browser as a child window.
+  ///
+  void SetAsChild(CefWindowHandle parent, const CefRect& windowRect) {
+    parent_window = parent;
+    x = windowRect.x;
+    y = windowRect.y;
+    width = windowRect.width;
+    height = windowRect.height;
   }
 
-  void SetTransparentPainting(bool transparentPainting) {
-    transparent_painting = transparentPainting;
-  }
-
-  void SetAsOffScreen(CefWindowHandle ParentWidget) {
-    window_rendering_disabled = true;
-    parent_widget = ParentWidget;
+  ///
+  // Create the browser using windowless (off-screen) rendering. No window
+  // will be created for the browser and all rendering will occur via the
+  // CefRenderHandler interface. The |parent| value will be used to identify
+  // monitor info and to act as the parent window for dialogs, context menus,
+  // etc. If |parent| is not provided then the main screen monitor will be used
+  // and some functionality that requires a parent window may not function
+  // correctly. In order to create windowless browsers the
+  // CefSettings.windowless_rendering_enabled value must be set to true.
+  // Transparent painting is enabled by default but can be disabled by setting
+  // CefBrowserSettings.background_color to an opaque value.
+  ///
+  void SetAsWindowless(CefWindowHandle parent) {
+    windowless_rendering_enabled = true;
+    parent_window = parent;
   }
 };
-
-#endif  // OS_LINUX
 
 #endif  // CEF_INCLUDE_INTERNAL_CEF_LINUX_H_

@@ -370,7 +370,7 @@ typedef struct _cef_v8value_t {
   int32 (CEF_CALLBACK *get_int_value)(struct _cef_v8value_t* self);
 
   ///
-  // Return an unisgned int value.  The underlying data will be converted to if
+  // Return an unsigned int value.  The underlying data will be converted to if
   // necessary.
   ///
   uint32 (CEF_CALLBACK *get_uint_value)(struct _cef_v8value_t* self);
